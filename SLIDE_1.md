@@ -7,14 +7,15 @@ INTRO / HOOK
 > Workshop Title: Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
 
 ## Why This Matters: 
-- Signals in Templates: Less Boilerplate
-- Fewer Bugs
-- performance
-- fine-grained updates: Changes bypass the component tree, updating only the specific computeds and effects that depend on the changed signal. This is often more efficient than a Virtual DOM diff
-- Smarter Change Detection: Updating Only What’s Needed
-- Signal can work with ZoneJS (zoneless)
-- Angular best-practices: Prefer Signals Over BehaviorSubjects for State Management
-- Fewer Bugs, Faster Apps, Happier Devs
+🔸 Signals in Templates: Less Boilerplate
+🔸 Performance boost: 
+🔸 Fine-grained updates: Changes bypass the component tree, updating only the specific computeds and effects that depend on the changed signal. This is often more efficient than a Virtual DOM diff
+🔸 Smarter Change Detection: Updating Only What's Needed
+🔸 Signal can work with ZoneJS (zoneless)
+🔸 Angular best-practices Prefer Signals, Over BehaviorSubjects for State Management
+
+## So, why again?
+Less code + fewer bugs + faster Apps = Happier Devs!
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -97,6 +98,14 @@ Instead, Signals are more like a glass of water, always present, always filled w
 
 --------------------------------------------------------------------------------------------------------------------
 
+🟩 Angular Change-Detection & Signals
+
+Angular is transitioning to fine-grained reactivity. Because with default change detection, there is no way for Angular to know exactly what has changed on the page, so that is why we cannot make any "assumptions" about what happened, and we need to check everything.
+
+> Signals are all about enabling very fine-grained updates to the DOM that are just not possible with the current change detection systems that we have available.
+
+
+
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -128,16 +137,26 @@ Converting Observables <-> Signals:
 
 🟩 Best Practices & Quick Notes
 
-Use signals for local, synchronous state in components.
+🔸Use signals for local, synchronous state in components.
+🔸Use observables for async streams (HTTP, websockets, timers).
+🔸Combine both: toSignal() to consume observables easily in templates.
+🔸Replace many @Input() + ngOnChanges() patterns with signals + computed values.
+🔸Signals don't replace Observables
+🔸Signals don't replace Observables; they are state containers that allow you to store and react to values in a reactive way.
+🔸Angular favour signal() / computed() / effect() for component-local or simple service state; reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc)
 
-Use observables for async streams (HTTP, websockets, timers).
 
-Combine both: toSignal() to consume observables easily in templates.
+--------------------------------------------------------------------------------------------------------------------
 
-Replace many @Input() + ngOnChanges() patterns with signals + computed values.
+🟩 THANKS!
 
-Signals don't replace Observables
+More reading:
+Signals & JS Event Loop: Rethinking Angular Reactive Sync
+https://dev.to/leolanese/signals-js-event-loop-rethinking-angular-reactive-sync-48bn
 
-Signals don't replace Observables; they are state containers that allow you to store and react to values in a reactive way.
+Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+):
+Angular traditionally offers template-driven and reactive forms. Template-driven forms use ngModel bindings and directives (e.g. NgForm, NgModel) in the template. Reactive forms (via @angular/forms) use FormControl and FormGroup classes to manage form state explicitly. Now, Angular also introduce Signals, a fine-grained reactivity model reducing boilerplate and improving reactivity.
+https://github.com/leolanese/Angular-Signal-ReactiveForms
+
 
 
