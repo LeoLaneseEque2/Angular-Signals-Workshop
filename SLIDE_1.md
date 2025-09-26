@@ -9,10 +9,11 @@ INTRO / HOOK
 ## Why This Matters: 
 - Less Code
 - Fewer Bugs
-- Faster Apps
-- Angular Signals Change the Way We Build Angular Apps
+- performance
+- fine-grained updates
+- Signal can work with ZoneJS (zoneless)
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 ===
 SHORT BACKGROUND HISTORY TO CPNNECT
@@ -20,12 +21,17 @@ SHORT BACKGROUND HISTORY TO CPNNECT
 
 # Angular Signals Change the Way We Build Angular Apps
 
-Going from:
-→ Angular 2–12 days: Imperative, manual subscribe/unsubscribe 
+## Angular progression as days going by:
+→ Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS 
 → Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display") 
 → Angular 16+ days: Modern declarative hybrid + Signals and reactive state 
 
----
+## If you zoom out:
+```js
+Zones → RxJS + async pipe → Signals + fine-grained reactivity + ZoneLess
+```
+
+--------------------------------------------------------------------------------------------------------------------
 
 → Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
 
@@ -61,4 +67,11 @@ async pipe does the subscribing/unsubscribing automatically in the template
 ```js
 data = toSignal(this.service.getData());
 ```
+
+--------------------------------------------------------------------------------------------------------------------
+
+# Understanding Signals
+
+What Are Signals?
+
 
