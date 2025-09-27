@@ -274,23 +274,39 @@ Converting Observables <-> Signals:
 
 🔸Use signals for local, synchronous state in components.
 🔸Use observables for async streams (HTTP, websockets, timers).
-🔸Combine both: toObservable() / toSignal() to consume observables easily in templates.
-🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values.
-```js
-// ❌ Old way
-@Input() set user(user: User) {
-  this.userSubject.next(user);
-}
-ngOnChanges(changes: SimpleChanges) {
-  if (changes['user']) {
-    // complex logic
-  }
-}
 
-// ✅ New way
-user = input<User>(); // Signal input
-userName = computed(() => this.user()?.name || 'Unknown');
-```
+
+
+ <details>
+   <summary>🔸Combine both: toObservable() / toSignal() to consume observables easily in templates.</summary>
+
+    // Observable → Signal conversion
+    const users = toSignal(http.get<User[]>('/api/users'), {
+      initialValue: []
+    });
+
+    // Signal → Observable conversion (less common)
+    const count$ = toObservable(count);
+
+ </details>
+ <details>
+   <summary>🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values.
+
+     // ❌ instead of
+     @Input() set user(user: User) {
+        this.userSubject.next(user);
+     }
+     ngOnChanges(changes: SimpleChanges) {
+        if (changes['user']) {
+          // complex logic
+        }
+    }
+
+    // ✅ better do
+    user = input<User>(); // Signal input
+    userName = computed(() => this.user()?.name || 'Unknown');
+ </details>
+ 
 🔸Signals don't replace Observables
 🔸Signals don't replace Observables; they are state containers that allow you to store and react to values in a reactive way.
 🔸Angular favour signal() / computed() / effect() for component-local or simple service state, reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc)
