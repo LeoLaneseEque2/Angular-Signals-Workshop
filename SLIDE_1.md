@@ -79,15 +79,69 @@ data = toSignal(this.service.getData());
 🟩 Understanding Signals
 
 🤔 What Are Signals?
-> Signals are primitive reactive unit containers, that hold a single value. The reference to that value is immutable, but the value itself can be changed. When the value changes (not just mutate), Angular automatically triggers change detection.
+> Signals are `primitive` `reactive unit` `containers` that hold a `single value`. The signal wrapper maintains an `immutable reference to its current value, but the value itself can be change` through `designated Signal API methods`. When the value changes this triggers Change Detection. When mutates don't.
 
-🚨 Signals are immutable containers, but if the value they hold is a reference (like an object or array), that reference can be mutated directly, which bypasses Angular reactivity system.
-(if you mutate the object or array inside a signal without replacing the reference, Angular won’t know anything changed, so change detection won’t run)
+- `primitive` are simple fundamental building block
+- `reactive Unit` When the signal value changes, it automatically notifies
+- `shell containers` The signal itself is not the value. A signal acts as a "shell" or a "wrapper" around the actual data. We interact with the container to get or set the value
+- `single Value` means Each signal manages one atomic state unit enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
+
+```js
+// ✅ SINGLE values
+const count = signal(0);           // Single number
+const name = signal('John');       // Single string  
+const isLoading = signal(false);   // Single boolean
+
+// ✅ Also SINGLE values (Arrays and object)
+const user = signal({name: 'John', age: 30});     // Single object
+const items = signal(['apple', 'banana']);        // Single array
+```
+
+```js
+// ❌ Multiple independent states bundled together
+const userState = signal({
+  name: 'John',
+  age: 30,
+  isLoading: false,
+  error: null
+});
+
+// ✅ Separate signals for independent concerns
+const userName = signal('John');
+const userAge = signal(30);
+const isLoading = signal(false);
+const error = signal(null);
+```
+
+```js
+// ❌ This is NOT what signals are for (multiple independent values)
+const multipleValues = signal(['John', 30, false]); // Hard to manage
+
+// ❌ NOT like RxJS streams that emit multiple values over time
+const stream$ = new Subject(); // Can emit many values
+stream$.next(1);
+stream$.next(2);
+stream$.next(3);
+```
+
+- `immutable reference to its current value, but the value itself can be change`
+🚨 While Signals are immutable containers, if the value they hold is a reference (like an object or array), that reference can be mutated directly, which bypasses Angular reactivity system (if you mutate the object or array inside a signal without replacing the reference, Angular won't know anything changed, so change detection won't run)
 
 🚨 Signals hold an immutable value, but the signal reference itself is mutable, that why we can change the value of a signal because objects and arrays are passed by reference in JS
 
+```js
+const user = signal({name: 'John'});
 
-🟩 Signals are immutable, but the value they hold is not
+// ❌ "Just mutated" - no change detection
+user().name = 'Jane';  // Angular ignores this
+
+// ✅ "Value changed" - triggers change detection  
+user.set({name: 'Jane'});  // Angular detects this
+```
+
+
+🟩 Immutable Container, Mutable Value
+> Signals are immutable, but the value they hold is not
 > Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
 
 ```js
@@ -112,9 +166,41 @@ userSignal({ ...userSignal(), age: 26 });
 // ✅ This triggers the effect and Angular reacts
 ```
 
+- `designated Signal API methods`
+
+
+```js
+// Creation with options
+const user = signal({name: 'John'}, {
+  equal: (a, b) => a.name === b.name,  // Custom equality
+});
+
+// Read value
+const user = user();
+const name = user().name;
+
+// Write value
+user.set({name: 'Jane'});
+user.update(u => ({...u, age: 30}));
+
+// Readonly view
+const readOnlyUser = user.asReadonly();
+
+// Derived signal
+const greeting = computed(() => `Hello ${user().name}`);
+```
+
+
 🟩 Incremental CD
-When a signal’s value is replaced/change, the signal is marked as dirty, not the entire component.
+When a signal value is replaced/change, the signal is marked as dirty, not the entire component.
 Angular CD then runs incrementally, updating only the parts that actually read the changed signal.
+
+
+
+Operation	                What Gets Mutated	            Triggers CD?
+user().name = 'Jane'	    The value object	              ❌ No
+user.set({name: 'Jane'})	The signal's internal state	    ✅ Yes
+
 
 🟩 Signals are primitive reactive units
 Each signal holds one value. The value can be primitive (number, string, etc) or a reference (object, array).
@@ -130,9 +216,9 @@ Each signal holds one value. The value can be primitive (number, string, etc) or
 
 🤔 Signals
 
-> Are an `eager`, `reactive`, `single-value` primitive conaining `mutable value`
+> Are an `eager`, `reactive`, `single-value` primitive containing `mutable value`
 
-- `eager` Always holds a value — no need to subscribe
+- `eager` Always holds a value, no need to subscribe
 - `reactive` Changes automatically trigger Angular’s change detection
 - `single-value` Holds exactly one value at a time
 - `mutable value` The value inside the signal can be changed
