@@ -1,23 +1,19 @@
-===
-INTRO / HOOK
-===
-
-🟩 State isn't just data. It's behaviour waiting to happen.
+# 🟩 State isn't just data. It's behaviour waiting to happen.
 
 > Workshop Title: Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
 
 ## Why This Matters: 
-🔸 Signals in Templates: Less Boilerplate<br>
-🔸 Performance boost: 
-🔸 Smarter Change Detection: Updating Only What's Needed
-🔸 Signal can work with ZoneJS (zoneless)
-🔸 Angular best-practices Prefer Signals, Over BehaviorSubjects for State Management
-🔸 Signals bring explicit reads/writes: Www don't just have a blob of state sitting in a component and hope Angular notices changes. You read a signal’s value when you need it, and you write to it explicitly
-🔸 No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates.
-🔸 Signals make CD OnPush optional: Signals work perfectly without OnPush, but adding OnPush just removes the default "check every component each cycle" safety net and leans fully on the signals mechanism
+🔸 Signals in Templates: Less Boilerplate <br>
+🔸 Smarter Change Detection: Updating Only What's Needed <br>
+🔸 Signal can work with ZoneJS (zoneless) <br>
+🔸 Signals bring explicit reads/writes: We don't just have a blob of state sitting in a component and hope Angular notices changes. You read a signal value when you need it, and you write to it explicitly <br>
+🔸 No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
+🔸 Signals make CD OnPush optional: Signals work perfectly without OnPush, but adding OnPush just removes the default "check every component each cycle" safety net and leans fully on the signals mechanism <br>
+🔸 Angular Signal is considered a best-practices: Prefer Signals, Over BehaviorSubjects for State Management, Prefer signal input/out, Prefer Signal forms in Angular 21+ instead reactive-forms or template-driven forms <br>
+
 
 ## So, why again?
-Less code + fewer bugs + faster Apps = Happier Devs!
+🔸Less code + fewer bugs + faster Apps = Happier Devs! 
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +21,7 @@ Less code + fewer bugs + faster Apps = Happier Devs!
 SHORT BACKGROUND HISTORY TO CPNNECT
 ===
 
-🟩 Angular Signals Change the Way We Build Angular Apps
+# 🟩 Angular Signals Change the Way We Build Angular Apps
 
 ## Angular progression as days going by:
 → Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS 
@@ -76,7 +72,7 @@ data = toSignal(this.service.getData());
 
 --------------------------------------------------------------------------------------------------------------------
 
-🟩 Understanding Signals
+# 🟩 Understanding Signals
 
 🤔 What Are Signals?
 > Signals are `primitive` `reactive unit` `containers` that hold a `single value`. The signal wrapper maintains an `immutable reference to its current value, but the value itself can be change` through `designated Signal API methods`. When the value changes this triggers Change Detection. When mutates don't.
@@ -140,7 +136,7 @@ user.set({name: 'Jane'});  // Angular detects this
 ```
 
 
-🟩 Immutable Container, Mutable Value
+# 🟩 Immutable Container, Mutable Value
 > Signals are immutable, but the value they hold is not
 > Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
 
@@ -191,7 +187,7 @@ const greeting = computed(() => `Hello ${user().name}`);
 ```
 
 
-🟩 Incremental CD
+# 🟩 Incremental CD
 When a signal value is replaced/change, the signal is marked as dirty, not the entire component.
 Angular CD then runs incrementally, updating only the parts that actually read the changed signal.
 
@@ -231,7 +227,7 @@ Instead, Signals are more like a glass of water, always present, always filled, 
 
 --------------------------------------------------------------------------------------------------------------------
 
-🟩 Angular Change-Detection & Signals
+# 🟩 Angular Change-Detection & Signals
 
 Angular is transitioning to fine-grained reactivity. Because with default change detection, there is no way for Angular to know exactly what has changed on the page, so that is why we cannot make any "assumptions" about what happened, and we need to check everything.
 
@@ -243,18 +239,19 @@ Angular is transitioning to fine-grained reactivity. Because with default change
 
 --------------------------------------------------------------------------------------------------------------------
 
-🟩 Signal common Patterns
+# 🟩 A real example 
 
-- signal-input-pattern architecture
-- Derived State: 
+> Implemented signal common patterns like Signal Batch Updates
+
+## signal-input-pattern architecture
+## Derived State: 
 Use computed/createMemo for expensive calculations or values that depend on other signals.
 
 ```js
 const isEven = createMemo(() => count() % 2 === 0);
 ```
 
-Signal Batch Updates: 
-
+## Signal Batch Updates: 
 When a signal changes, Angular schedules change detection for the components that read that signal.
 
 If multiple signals are updated within the same synchronous execution, Angular can batch them so the affected components only run CD once.
@@ -273,20 +270,35 @@ Converting Observables <-> Signals:
 
 --------------------------------------------------------------------------------------------------------------------
 
-🟩 Best Practices & Quick Notes
+# 🟩 Best Practices & Quick Notes
 
 🔸Use signals for local, synchronous state in components.
 🔸Use observables for async streams (HTTP, websockets, timers).
-🔸Combine both: toSignal() to consume observables easily in templates.
-🔸Replace many @Input() + ngOnChanges() patterns with signals + computed values.
+🔸Combine both: toObservable() / toSignal() to consume observables easily in templates.
+🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values.
+```js
+// ❌ Old way
+@Input() set user(user: User) {
+  this.userSubject.next(user);
+}
+ngOnChanges(changes: SimpleChanges) {
+  if (changes['user']) {
+    // complex logic
+  }
+}
+
+// ✅ New way
+user = input<User>(); // Signal input
+userName = computed(() => this.user()?.name || 'Unknown');
+```
 🔸Signals don't replace Observables
 🔸Signals don't replace Observables; they are state containers that allow you to store and react to values in a reactive way.
-🔸Angular favour signal() / computed() / effect() for component-local or simple service state; reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc)
+🔸Angular favour signal() / computed() / effect() for component-local or simple service state, reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc)
 
 
 --------------------------------------------------------------------------------------------------------------------
 
-🟩 THANKS!
+# 🟩 THANKS!
 
 More reading:
 Signals & JS Event Loop: Rethinking Angular Reactive Sync
