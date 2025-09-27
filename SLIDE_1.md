@@ -18,7 +18,7 @@
 --------------------------------------------------------------------------------------------------------------------
 
 ===
-SHORT BACKGROUND HISTORY TO CPNNECT
+SHORT BACKGROUND HISTORY TO CONNECT
 ===
 
 # 🟩 Angular Signals Change the Way We Build Angular Apps
@@ -75,12 +75,38 @@ data = toSignal(this.service.getData());
 # 🟩 Understanding Signals
 
 🤔 What Are Signals?
-> Signals are `primitive` `reactive unit` `containers` that hold a `single value`. The signal wrapper maintains an `immutable reference to its current value, but the value itself can be change` through `designated Signal API methods`. When the value changes this triggers Change Detection. When mutates don't.
+🚨 Signals are `primitive` `reactive unit` and `immutable containers` that hold a `single value`, but the `value itself can be change` through `designated Signal API methods`. This `change (primitives) triggers change detection. When mutation (object/arrays) don't`.
+
+- `change triggers change detection. When mutation don't`
+For primitives: No issue, since you always replace the value.
+```js
+const count = signal(0);
+const name = signal('John');
+const active = signal(true);
+
+// ✅ Always works - primitives are inherently immutable
+count.set(5);           // Replacement is the only option
+name.set('Jane');       // Can't mutate strings anyway
+active.set(false);      // No way to accidentally mutate
+```
+For Objects/Arrays: The Pitfall Zone
+```js
+const user = signal({name: 'John', age: 30});
+const items = signal(['apple', 'banana']);
+
+// ❌ SILENT BUGS - mutation doesn't trigger reactivity
+user().name = 'Jane';       // UI won't update!
+items().push('orange');     // No change detection!
+
+// ✅ CORRECT - replacement triggers reactivity
+user.set({...user(), name: 'Jane'});
+items.set([...items(), 'orange']);
+```
 
 - `primitive` are simple fundamental building block
 - `reactive Unit` When the signal value changes, it automatically notifies
 - `shell containers` The signal itself is not the value. A signal acts as a "shell" or a "wrapper" around the actual data. We interact with the container to get or set the value
-- `single Value` means Each signal manages one atomic state unit enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
+- `single Value` which can be a primitive, object, or array. Each signal manages one atomic state unit enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
 
 ```js
 // ✅ SINGLE values
@@ -120,9 +146,8 @@ stream$.next(2);
 stream$.next(3);
 ```
 
-- `immutable reference to its current value, but the value itself can be change`
+- `value itself can be change`
 🚨 While Signals are immutable containers, if the value they hold is a reference (like an object or array), that reference can be mutated directly, which bypasses Angular reactivity system (if you mutate the object or array inside a signal without replacing the reference, Angular won't know anything changed, so change detection won't run)
-
 🚨 Signals hold an immutable value, but the signal reference itself is mutable, that why we can change the value of a signal because objects and arrays are passed by reference in JS
 
 ```js
@@ -137,8 +162,8 @@ user.set({name: 'Jane'});  // Angular detects this
 
 
 # 🟩 Immutable Container, Mutable Value
-> Signals are immutable, but the value they hold is not
-> Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
+🚨 Signals are immutable, but the value they hold is not
+🚨 Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
 
 ```js
 import { signal, effect } from '@angular/core';
@@ -163,8 +188,6 @@ userSignal({ ...userSignal(), age: 26 });
 ```
 
 - `designated Signal API methods`
-
-
 ```js
 // Creation with options
 const user = signal({name: 'John'}, {
@@ -186,6 +209,12 @@ const readOnlyUser = user.asReadonly();
 const greeting = computed(() => `Hello ${user().name}`);
 ```
 
+- `change (primitives) triggers change detection. When mutation (object/arrays) don't`
+🚨 For primitives: Any change via these methods triggers change detection.
+🚨 For objects/arrays: Only replacing the whole value (not mutating properties/elements) triggers change detection.
+
+
+--------------------------------------------------------------------------------------------------------------------
 
 # 🟩 Incremental CD
 When a signal value is replaced/change, the signal is marked as dirty, not the entire component.
