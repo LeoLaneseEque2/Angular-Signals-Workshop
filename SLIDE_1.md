@@ -9,10 +9,12 @@ INTRO / HOOK
 ## Why This Matters: 
 🔸 Signals in Templates: Less Boilerplate
 🔸 Performance boost: 
-🔸 Fine-grained updates: Changes bypass the component tree, updating only the specific computeds and effects that depend on the changed signal. This is often more efficient than a Virtual DOM diff
 🔸 Smarter Change Detection: Updating Only What's Needed
 🔸 Signal can work with ZoneJS (zoneless)
 🔸 Angular best-practices Prefer Signals, Over BehaviorSubjects for State Management
+🔸 Signals bring explicit reads/writes: Www don't just have a blob of state sitting in a component and hope Angular notices changes. You read a signal’s value when you need it, and you write to it explicitly
+🔸 No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates.
+🔸 Signals make CD OnPush optional: Signals work perfectly without OnPush, but adding OnPush just removes the default "check every component each cycle" safety net and leans fully on the signals mechanism
 
 ## So, why again?
 Less code + fewer bugs + faster Apps = Happier Devs!
@@ -77,10 +79,45 @@ data = toSignal(this.service.getData());
 🟩 Understanding Signals
 
 🤔 What Are Signals?
-> Signals are reactive primitives containers, that hold an immutable single value. When that value changes, they automatically trigger change detection. Unlike Observables, which emit over time.
+> Signals are primitive reactive unit containers, that hold a single value. The reference to that value is immutable, but the value itself can be changed. When the value changes (not just mutate), Angular automatically triggers change detection.
 
 🚨 Signals are immutable containers, but if the value they hold is a reference (like an object or array), that reference can be mutated directly, which bypasses Angular reactivity system.
+(if you mutate the object or array inside a signal without replacing the reference, Angular won’t know anything changed, so change detection won’t run)
+
 🚨 Signals hold an immutable value, but the signal reference itself is mutable, that why we can change the value of a signal because objects and arrays are passed by reference in JS
+
+
+🟩 Only replacing the value triggers CD, mutating an object won't
+
+```js
+import { signal, effect } from '@angular/core';
+
+// Create a signal holding an object
+const userSignal = signal({ name: 'Alice', age: 25 });
+
+// Reactive effect that logs whenever the signal changes
+effect(() => {
+  console.log('User changed:', userSignal());
+});
+
+// ---- MUTATION ----
+// Directly mutating the object inside the signal
+userSignal().age = 26;  
+// ❌ This does NOT trigger the effect, no change detection happens
+
+// ---- REPLACEMENT ----
+// Replacing the whole value with a new object creates a new reference, which triggers CD and any effects
+userSignal({ ...userSignal(), age: 26 });  
+// ✅ This triggers the effect and Angular reacts
+```
+
+🟩 Incremental CD
+When a signal’s value is replaced/change, the signal is marked as dirty, not the entire component.
+Angular CD then runs incrementally, updating only the parts that actually read the changed signal.
+
+🟩 Signals are primitive reactive units
+Each signal holds one value. The value can be primitive (number, string, etc) or a reference (object, array).
+
 
 🤔 Observables
 > Are a `lazy`, `push`, `collection` of `multple values`
@@ -90,11 +127,20 @@ data = toSignal(this.service.getData());
 - `collection` because are collections of data similar to Arrays
 - `multiple values` because Observables can produce 0, or many values over time. Instantly, slowly or never
 
+🤔 Signals
+
+> Are an `eager`, `reactive`, `single-value` primitive conaining `mutable value`
+
+- `eager` Always holds a value — no need to subscribe
+- `reactive` Changes automatically trigger Angular’s change detection
+- `single-value` Holds exactly one value at a time
+- `mutable value` The value inside the signal can be changed
+
 
 🤔 Real Analogy
 Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. 
 
-Instead, Signals are more like a glass of water, always present, always filled with the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly.
+Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -120,7 +166,12 @@ Use computed/createMemo for expensive calculations or values that depend on othe
 const isEven = createMemo(() => count() % 2 === 0);
 ```
 
-Batch Updates: 
+Signal Batch Updates: 
+
+When a signal changes, Angular schedules change detection for the components that read that signal.
+
+If multiple signals are updated within the same synchronous execution, Angular can batch them so the affected components only run CD once.
+
 ```js
 Group multiple signal updates to trigger only one re-calculation.
 batch(() => {
