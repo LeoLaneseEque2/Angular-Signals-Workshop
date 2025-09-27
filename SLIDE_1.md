@@ -87,7 +87,8 @@ data = toSignal(this.service.getData());
 🚨 Signals hold an immutable value, but the signal reference itself is mutable, that why we can change the value of a signal because objects and arrays are passed by reference in JS
 
 
-🟩 Only replacing the value triggers CD, mutating an object won't
+🟩 Signals are immutable, but the value they hold is not
+> Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
 
 ```js
 import { signal, effect } from '@angular/core';
@@ -123,9 +124,9 @@ Each signal holds one value. The value can be primitive (number, string, etc) or
 > Are a `lazy`, `push`, `collection` of `multple values`
 
 - `lazy` Need to subscribe to it
-- `push` Obs$ push values to consumer
-- `collection` because are collections of data similar to Arrays
-- `multiple values` because Observables can produce 0, or many values over time. Instantly, slowly or never
+- `push` Observables$ push values to consumer
+- `collection` because are collections of data, similar to Arrays
+- `multiple values` because Observables can produce 0,1, or many values over time. Instantly, slowly or never
 
 🤔 Signals
 
