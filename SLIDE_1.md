@@ -7,7 +7,7 @@ INTRO / HOOK
 > Workshop Title: Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
 
 ## Why This Matters: 
-🔸 Signals in Templates: Less Boilerplate
+🔸 Signals in Templates: Less Boilerplate<br>
 🔸 Performance boost: 
 🔸 Smarter Change Detection: Updating Only What's Needed
 🔸 Signal can work with ZoneJS (zoneless)
