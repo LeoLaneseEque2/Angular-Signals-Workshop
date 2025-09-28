@@ -1,12 +1,12 @@
 🟩 Workshop Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
 
-🔸1. Why This Matters?
-🔸2. Angular short evolution
-🔸3. Understanding Signals
-    Definition
-    How to update and read signal value
+🔸1. Why This Matters? <br>
+🔸2. Angular short evolution <br>
+🔸3. Understanding Signals <br>
+   🔸🔸Definition <br>
+   🔸🔸How to update and read signal value <br>
 
-🔸5. A real example 
+🔸5. A real example <br>
 
 
 
