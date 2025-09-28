@@ -11,11 +11,17 @@
 🔸 Signals make CD OnPush optional: Signals work perfectly without OnPush, but adding OnPush just removes the default "check every component each cycle" safety net and leans fully on the signals mechanism <br>
 🔸 Angular Signal is considered a best-practices: Prefer Signals, Over BehaviorSubjects for State Management, Prefer signal input/out, Prefer Signal forms in Angular 21+ instead reactive-forms or template-driven forms <br>
 
+🔸 Signals are no longer "just another feature", they're the core of Angular’s reactivity going forward.
+
 
 ## So, why again?
 🔸Less code + fewer bugs + faster Apps = Happier Devs! 
 
 --------------------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------------
+
 
 ===
 SHORT BACKGROUND HISTORY TO CONNECT
