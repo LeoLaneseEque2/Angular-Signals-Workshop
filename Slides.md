@@ -1,5 +1,7 @@
 🟩 Workshop Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
 
+> State isn't just data. It's behaviour waiting to happen!
+
 🔸1. Why This Matters? <br>
 🔸2. Angular short evolution <br>
 🔸3. Understanding Signals <br>
@@ -12,9 +14,7 @@
 
 -------------------------------------------------------------------------------------------------
 
-# 🟩 State isn't just data. It's behaviour waiting to happen.
-
-## 1 - Why This Matters: 
+# 🟩 1. Why This Matters: 
 🔸 Signals in Templates: Less Boilerplate <br>
 🔸 Smarter Change Detection: Updating Only What's Needed <br>
 🔸 Signal can work with ZoneJS (zoneless) <br>
