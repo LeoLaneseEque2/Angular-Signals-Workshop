@@ -14,7 +14,8 @@
 
 -------------------------------------------------------------------------------------------------
 
-# 🟩 1. Why This Matters: 
+🟩 1. Why This Matters? 
+
 🔸 Signals in Templates: Less Boilerplate <br>
 🔸 Smarter Change Detection: Updating Only What's Needed <br>
 🔸 Signal can work with ZoneJS (zoneless) <br>
