@@ -1,8 +1,20 @@
+🟩 Workshop Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
+
+🔸1. Why This Matters?
+🔸2. Angular short evolution
+🔸3. Understanding Signals
+    Definition
+    How to update and read signal value
+
+🔸5. A real example 
+
+
+
+-------------------------------------------------------------------------------------------------
+
 # 🟩 State isn't just data. It's behaviour waiting to happen.
 
-> Workshop Title: Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
-
-## Why This Matters: 
+## 1 - Why This Matters: 
 🔸 Signals in Templates: Less Boilerplate <br>
 🔸 Smarter Change Detection: Updating Only What's Needed <br>
 🔸 Signal can work with ZoneJS (zoneless) <br>
@@ -10,24 +22,17 @@
 🔸 No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
 🔸 Signals make CD OnPush optional: Signals work perfectly without OnPush, but adding OnPush just removes the default "check every component each cycle" safety net and leans fully on the signals mechanism <br>
 🔸 Angular Signal is considered a best-practices: Prefer Signals, Over BehaviorSubjects for State Management, Prefer signal input/out, Prefer Signal forms in Angular 21+ instead reactive-forms or template-driven forms <br>
-
+🔸 Angular Team transitioning from ZoneJS, to fine-grained reactivity
 🔸 Signals are no longer "just another feature", they're the core of Angular’s reactivity going forward.
-
 
 ## So, why again?
 🔸Less code + fewer bugs + faster Apps = Happier Devs! 
 
 --------------------------------------------------------------------------------------------------------------------
 
+# 🟩 2. Angular short evolution
 
---------------------------------------------------------------------------------------------------------------------
-
-
-===
-SHORT BACKGROUND HISTORY TO CONNECT
-===
-
-# 🟩 Angular Signals Change the Way We Build Angular Apps
+> Angular Signals Change the Way We Build Angular Apps
 
 ## Angular progression as days going by:
 → Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS 
@@ -36,10 +41,11 @@ SHORT BACKGROUND HISTORY TO CONNECT
 
 ## If you zoom out:
 ```js
-Zones → RxJS + async pipe → Signals + fine-grained reactivity + ZoneLess
+Zones → RxJS
+        + async pipe → Signals
+                          + fine-grained reactivity + ZoneLess
 ```
 
---------------------------------------------------------------------------------------------------------------------
 
 → Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
 
@@ -78,7 +84,7 @@ data = toSignal(this.service.getData());
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 Understanding Signals
+# 🟩 3. Understanding Signals
 
 🤔 What Are Signals?
 🚨 Signals are `primitive` `reactive unit` and `immutable containers` that hold a `single value`, but the `value itself can be change` through `designated Signal API methods`. This `change (primitives) triggers change detection. When mutation (object/arrays) don't`.
@@ -95,6 +101,7 @@ count.set(5);           // Replacement is the only option
 name.set('Jane');       // Can't mutate strings anyway
 active.set(false);      // No way to accidentally mutate
 ```
+
 For Objects/Arrays: The Pitfall Zone
 ```js
 const user = signal({name: 'John', age: 30});
@@ -168,7 +175,7 @@ user.set({name: 'Jane'});  // Angular detects this
 
 
 # 🟩 Immutable Container, Mutable Value
-🚨 Signals are immutable, but the value they hold is not
+🚨 Signals are immutable containers, but the value they hold is not
 🚨 Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
 
 ```js
@@ -223,6 +230,7 @@ const greeting = computed(() => `Hello ${user().name}`);
 --------------------------------------------------------------------------------------------------------------------
 
 # 🟩 Incremental CD
+
 When a signal value is replaced/change, the signal is marked as dirty, not the entire component.
 Angular CD then runs incrementally, updating only the parts that actually read the changed signal.
 
@@ -274,7 +282,7 @@ Angular is transitioning to fine-grained reactivity. Because with default change
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 A real example 
+# 🟩 5. A real example 
 
 > Implemented signal common patterns like Signal Batch Updates
 
@@ -306,7 +314,6 @@ Converting Observables <-> Signals:
 --------------------------------------------------------------------------------------------------------------------
 
 # 🟩 Best Practices & Quick Notes
-
    
  <details>
     <summary>🔸Use signals for local, synchronous state in components.</summary>
