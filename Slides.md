@@ -35,6 +35,7 @@ In othe words: <br>
 (Modern Angular): Signal Change → 🎯 Direct Update → Only Affected Components = Signals eliminate the need for **blanket Change-Ddetection** by "knowing exactly what Components to update" <br>
 
 
+## 💥 So ... Why This Matters again?
 🟨 Real word Example: E-commerce Product TABLE
 <details>
     <summary>🔴 Before Signals (ZoneJS): </summary>
@@ -54,7 +55,7 @@ In othe words: <br>
       })
       export class DashboardComponent {
         // All these update independently at different frequencies
-        // bla bla bla
+        // we take a medium app: addToCart() → triggers 50 components checked 
       }
       ```
       🔴 Performance Problem:
@@ -89,18 +90,28 @@ In othe words: <br>
       ```
 </details>
 
-| Performance Metric | 🔴 Zone.js | 🟢 Signals | 🚀 Improvement |
-|-------------------|------------|------------|----------------|
-| **Components Checked** | 50+ | 1 | ⬇️ 98% reduction |
-| **Change Detection Time** | 15-20ms | 0.5-1ms | ⚡ 95% faster |
-| **Memory Operations** | 1000+ | 20-30 | 🧠 97% reduction |
-| **UI Thread Blocking** | Noticeable jank | Smooth | 🎯 Jank eliminated |
+<details>
+    <summary>## 🎯 Waste factor: ZoneJS Vs Signals: </summary>
+     
+      🔸 Regardless of the actual number ZoneJS checks EVERY component in the component tree. The problem scales with app size, as your Angular app grows, ZoneJS inefficiency grows linearly, while Signals remain constant.
 
-- Jank occurs when the browser can't maintain a smooth 60 FPS (frames per second). Each frame has only ~16.6ms to render, and if JavaScript execution takes longer, frames get dropped. This affect UX: Buttons feel "laggy" when clicked
+    | App Size | Zone.js Checks | Signals Checks | Waste Factor |
+    |----------|----------------|----------------|--------------|
+    | **Tiny App** | 5 components    | 1 component | 5x waste |
+    | **Medium App** | 50 components | 1 component | 50x waste |
+    | **Large App** | 500 components | 1 component | 500x waste |
+    
+    
+    ## 🎯 Real Data from Angular Team Tests:
+    🔸  85-95% reduction in change detection operations
+    🔸  60-70% faster UI updates in large applications
+    🔸 Eliminated jank during rapid state changes
 
-## 💥 So, why again? <br>
+</details>
+
+## 💥 So ... Why ... Why This Matters again? <br>
 🔸 Angular Signals Change the Way We Build Angular Apps: <br> 
-Gentle learning curve + Less boilerplate code + fewer bugs + faster Apps = Happier Devs! <br>
+Gentle learning curve + Less boilerplate code + less bugs + faster Apps + better UX = Happier Devs! <br>
 
 <br><br>
 -------------------------------------------------------------------------------------------------
@@ -579,11 +590,11 @@ batch(() => {
 # 🟩 THANKS!
 
 🚀 More reading: <br>
-💻 Signals & JS Event Loop: Rethinking Angular Reactive Sync: <br>
+📚 Signals & JS Event Loop: Rethinking Angular Reactive Sync: <br>
 The article explores how Angular Signals interact with JS Event Loop to create a more synchronous-feeling reactive programming model.
 https://dev.to/leolanese/signals-js-event-loop-rethinking-angular-reactive-sync-48bn
 
-💻 Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+): <br>
+📚 Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+): <br>
 Angular traditionally offers template-driven and reactive forms. Template-driven forms use ngModel bindings and directives (e.g. NgForm, NgModel) in the template. Reactive forms (via @angular/forms) use FormControl and FormGroup classes to manage form state explicitly. Angular 21+ also introduce Signals-Based forms, a fine-grained reactivity model reducing boilerplate and improving reactivity.
 https://github.com/leolanese/Angular-Signal-ReactiveForms
 
