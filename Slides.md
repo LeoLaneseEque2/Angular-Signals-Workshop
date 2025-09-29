@@ -375,28 +375,6 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 
 --------------------------------------------------------------------------------------------------------------------
 
-## 🟩 5. A real world example 
-
-> Implemented signal common patterns like Signal Batch Updates
-
-## signal-input-pattern architecture
-## Derived State: 
-## Signal Batch Updates: 
-When a signal changes, Angular schedules change detection for the components that read that signal.
-
-If multiple signals are updated within the same synchronous execution, Angular can batch them so the affected components only run CD once.
-
-```js
-Group multiple signal updates to trigger only one re-calculation.
-batch(() => {
-  setFirstName("John");
-  setLastName("Doe");
-}); // Effect depending on name runs only once.
-```
-
-
---------------------------------------------------------------------------------------------------------------------
-
 # 🟩 Best Practices & Quick Notes
    
  <details>
@@ -477,6 +455,55 @@ batch(() => {
     - Router events (use Router + Observables)
     - Complex async pipelines (use RxJS operators)
     - Global state management (use NgXS, Ngrx, or Services with Subjects)
+</details>
+
+<details>
+ <summary>🔸Incremental Change-Detection & Signal Batch Updates </summary>
+  Batch updates allow multiple signal changes to be grouped together and processed as a single update cycle, rather than triggering separate change detection cycles for each individual change.
+
+ ```js
+// Each signal change triggers its own update cycle
+this.nameSignal.set("John");     // → Change detection for components using nameSignal
+this.ageSignal.set(25);          // → Change detection for components using ageSignal  
+this.emailSignal.set("john@example.com"); // → Change detection for components using emailSignal
+
+// Result: 3 separate change detection cycles
+// But each cycle only updates components that use that specific signal
+```
+
+### The Key Difference from tradictional Angular Vs Signal 
+
+> ZoneJS (Traditional Angular) `Check ALL components in the app` VS Signal `Check only components using nameSignal` = Targeted Updates: Each signal only updates its consumers, No Global Scanning, incremental but surgical efficient
+
+```js
+this.name = "John";     // Check ALL components in the app
+this.age = 25;          // Check ALL components in the app again
+this.email = "john@example.com"; // Check ALL components in the app again
+// Result: 3 "global" change detection cycles
+
+this.nameSignal.set("John");     // Check only components using nameSignal
+this.ageSignal.set(25);          // Check only components using ageSignal
+this.emailSignal.set("john@example.com"); // Check only components using emailSignal
+// Result: 3 "targeted" change detection cycles
+```
+
+### Batch Updates Help:
+
+```js
+// Without batching
+this.nameSignal.set("John");     // → Update components using nameSignal
+this.ageSignal.set(25);          // → Update components using ageSignal
+this.emailSignal.set("john@example.com"); // → Update components using emailSignal
+
+// With batching
+batch(() => {
+  this.nameSignal.set("John");
+  this.ageSignal.set(25);
+  this.emailSignal.set("john@example.com");
+});
+// Result: 1 "targeted" change detection cycles
+```
+
 </details>
 
 --------------------------------------------------------------------------------------------------------------------
