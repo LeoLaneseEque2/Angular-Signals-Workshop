@@ -2,16 +2,16 @@
 
 > State isn't just data. It's behaviour waiting to happen!
 
-🟦 [1. Why This Matters?](#1-why-this-matters)
+🟦 [1. Why This Matters?](#1-why-this-matters) <br>
 
--- 🟨 [Real World Example: E-commerce table product](#real-world-example-e-commerce-table-product)
-🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift)
--- 🟨 [Angular patterns as the days go by](#angular-patterns-as-the-days-go-by)
--- 🟨 [A fancy Analogy: Observables & Signals](#a-fancy-analogy-observables--signals)
+-- 🟨 [Real World Example: E-commerce table product](#real-world-example-e-commerce-table-product) <br>
+🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift) <br>
+-- 🟨 [Angular patterns as the days go by](#angular-patterns-as-the-days-go-by) <br>
+-- 🟨 [A fancy Analogy: Observables & Signals](#a-fancy-analogy-observables--signals) <br>
 
-🟦 [3. Understanding Signals](#3-understanding-signals)
--- 🟨 [Definition](#definition)
--- 🟨 [How to update and read signal value](#how-to-update-and-read-sign-value)
+🟦 [3. Understanding Signals](#3-understanding-signals) <br>
+-- 🟨 [Definition](#definition)<br>
+-- 🟨 [How to update and read signal value](#how-to-update-and-read-sign-value)<br>
 
 🟦 5. A real world example <br>
 
