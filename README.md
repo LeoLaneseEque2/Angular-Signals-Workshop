@@ -1,4 +1,6 @@
-# Eq2-Workshop: Evolving Angular: Imperative → Reactive → Signals
+# Eq2-Workshop: 
+
+> Evolving Angular: Imperative → Reactive → Signals
 
 ```js
 "State isn't just data, it's behaviour waiting to happen."
