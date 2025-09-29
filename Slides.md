@@ -3,7 +3,7 @@
 > State isn't just data. It's behaviour waiting to happen!
 
 🔸1. Why This Matters? <br>
-🔸2. The Mindset shift <br>
+🔸2. The Reactive Mindset shift <br>
 🔸3. Understanding Signals <br>
    🔸🔸Definition <br>
    🔸🔸How to update and read signal value <br>
@@ -16,7 +16,7 @@
 
 🟩 1. Why This Matters? 
 
-🔸 `ZoneLess`: Signal can work with ZoneJS <br>
+🔸 `ZoneLess`: Signal can work with or without ZoneJS <br>
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
 🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward`. <br>
 
@@ -25,7 +25,7 @@
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 2. The Mindset shift
+# 🟩 2. The Reactive Mindset shift
 
 > Angular Signals Change the Way We Build Angular Apps
 
