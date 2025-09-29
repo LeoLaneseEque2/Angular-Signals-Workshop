@@ -3,6 +3,7 @@
 > State isn't just data. It's behaviour waiting to happen!
 
 🟦 [1. Why This Matters?](#1-why-this-matters)
+🟦 [1. Why This Matters?](#1-why-this-matters)
 
  -- 🟨 Real word Example: E-commerce table product
 🟦 2. The Reactive Mindset shift <br>
@@ -31,6 +32,8 @@
 <br><br>
 
 ## 🟦 1. Why This Matters?
+
+## 1. Why This Matters?
 
 🔸 Angular is again a cool framework to use :)
 
