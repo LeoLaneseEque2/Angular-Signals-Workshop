@@ -472,10 +472,11 @@ batch(() => {
 
 🚀 More reading: <br>
 💻 Signals & JS Event Loop: Rethinking Angular Reactive Sync: <br>
+The article explores how Angular Signals interact with JS Event Loop to create a more synchronous-feeling reactive programming model.
 https://dev.to/leolanese/signals-js-event-loop-rethinking-angular-reactive-sync-48bn
 
 💻 Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+): <br>
-Angular traditionally offers template-driven and reactive forms. Template-driven forms use ngModel bindings and directives (e.g. NgForm, NgModel) in the template. Reactive forms (via @angular/forms) use FormControl and FormGroup classes to manage form state explicitly. Now, Angular also introduce Signals, a fine-grained reactivity model reducing boilerplate and improving reactivity.
+Angular traditionally offers template-driven and reactive forms. Template-driven forms use ngModel bindings and directives (e.g. NgForm, NgModel) in the template. Reactive forms (via @angular/forms) use FormControl and FormGroup classes to manage form state explicitly. Angular 21+ also introduce Signals-Based forms, a fine-grained reactivity model reducing boilerplate and improving reactivity.
 https://github.com/leolanese/Angular-Signal-ReactiveForms
 
 
