@@ -22,8 +22,9 @@
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
 🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward` with . <br>
 
-## 💥 So, why again?
-🔸 Angular Signals Change the Way We Build Angular Apps: Less boilerplate code + fewer bugs + faster Apps = Happier Devs! <br>
+## 💥 So, why again? <br>
+🔸 Angular Signals Change the Way We Build Angular Apps: <br> 
+Less boilerplate code + Gentle learning curve + fewer bugs + faster Apps = Happier Devs! <br>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -34,136 +35,149 @@
 → 2) 🟡 Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display")  <br>
 → 3) 🟢 Angular 16+ days: Modern declarative hybrid + Signals and reactive state  <br>
 
-🔸 1) 🔴 Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS magic, Change-Detection storms, manual cleanup
 
-We're already working with Observables and streams, but the way most Devs used it wasn't really reactive in the "declarative" sense,
+
+<details>
+    <summary> 🔸 1) 🔴 Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS magic, Change-Detection storms, manual cleanup  </summary>
+
+ We're already working with Observables and streams, but the way most Devs used it wasn't really reactive in the "declarative" sense,
 it was imperative plumbing around a reactive library.
-```js
-// FOCUS:   Zone.js magic, change detection storms, manual cleanup, the "why" behind the evolution
-// Imperative use of a reactive library
-// RxJS used imperatively, we manage subscription lifecycle yourself
-@Component({
-  template: `
-    <div *ngIf="loading">Loading...</div>
-    <div *ngIf="error" class="error">{{ error }}</div>
-    <div *ngIf="user">
-      <h2>{{ user.name }}</h2>
-      <p>{{ user.email }}</p>
-    </div>
-    <button (click)="loadUser()">Reload</button>
-  `
-})
-export class UserProfileComponent implements OnInit, OnDestroy {
-  user: any = null;
-  loading = false;
-  error: string = '';
-  private subscription?: Subscription;
 
-  ngOnInit() {
-    this.loadUser();
-  }
-
-  loadUser() {
-    this.loading = true;
-    this.error = '';
+     ```js
+     // FOCUS:   Zone.js magic, change detection storms, manual cleanup, the "why" behind the evolution
+     // Imperative use of a reactive library
+     // RxJS used imperatively, we manage subscription lifecycle yourself
+     @Component({
+       template: `
+         <div *ngIf="loading">Loading...</div>
+         <div *ngIf="error" class="error">{{ error }}</div>
+         <div *ngIf="user">
+           <h2>{{ user.name }}</h2>
+           <p>{{ user.email }}</p>
+         </div>
+         <button (click)="loadUser()">Reload</button>
+       `
+     })
+    export class UserProfileComponent implements OnInit, OnDestroy {
+      user: any = null;
+      loading = false;
+      error: string = '';
+      private subscription?: Subscription;
     
-    this.subscription = this.userService.getUser(123).subscribe({   // Manual management
-      next: (user) => {
-        this.user = user;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load user';
-        this.loading = false;
+      ngOnInit() {
+        this.loadUser();
       }
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe(); // Don't forget!
-    }
-  }
-}
-```
-
-
-🔸 2) 🟡 Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display")
-  ```js
-    // Focus: RxJS mastery, async pipes, declarative templates, reactive thinking
-  @Component({
-    template: `
-      <!-- async pipe does the subscribing/unsubscribing automatically in the template -->
-      <ng-container *ngIf="user$ | async as userState">
-        <div *ngIf="userState.loading">Loading...</div>
-        <div *ngIf="userState.error" class="error">{{ userState.error }}</div>
-        <div *ngIf="userState.data">
-          <h2>{{ userState.data.name }}</h2>
-          <p>{{ userState.data.email }}</p>
-        </div>
-      </ng-container>
-      <button (click)="reload$.next()">Reload</button>
-    `
-  })
-  export class UserProfileComponent {
-    private reload$ = new BehaviorSubject<void>(undefined);
     
-    user$ = this.reload$.pipe(
-      switchMap(() => {
-        return this.userService.getUser(123).pipe(
-          map(data => ({ data, loading: false, error: '' })),
-          catchError(error => of({ 
-            data: null, 
-            loading: false, 
-            error: 'Failed to load user' 
-          })),
-          startWith({ data: null, loading: true, error: '' })
-        );
-      })
-    );
-  
-    constructor(private userService: UserService) {}
-  }
-  ```
+      loadUser() {
+        this.loading = true;
+        this.error = '';
+        
+        this.subscription = this.userService.getUser(123).subscribe({   // Manual management
+          next: (user) => {
+            this.user = user;
+            this.loading = false;
+          },
+          error: (err) => {
+            this.error = 'Failed to load user';
+            this.loading = false;
+          }
+        });
+      }
+    
+      ngOnDestroy() {
+        if (this.subscription) {
+          this.subscription.unsubscribe(); // Don't forget!
+        }
+      }
+    }
+    ```
+</details>
 
-🔸 3) 🟢 Typical pattern Angular 16+ days: Modern Hybrid + Signals: Signals wrap observables, template reacts automatically to data. Template just reacts to data
- ```js
- //  Modern Approach: Simple, fine-grained updates, no subscriptions, excellent performance
- @Component({
-   template: `
-     <div *ngIf="loading()">Loading...</div>
-     <div *ngIf="error()" class="error">{{ error() }}</div>
-     <div *ngIf="user()">
-       <h2>{{ user()!.name }}</h2>
-       <p>{{ user()!.email }}</p>
-     </div>
-     <button (click)="loadUser()">Reload</button>
-   `
- })
- export class UserProfileComponent {
-   user = signal<any>(null);
-   loading = signal(false);
-   error = signal('');
- 
-   constructor(private userService: UserService) {
-     this.loadUser();
-   }
- 
-   async loadUser() {
-     this.loading.set(true);
-     this.error.set('');
+
+
+<details>
+    <summary> 🔸 2) 🟡 Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display")  </summary>
+
+
+     ```js
+       // Focus: RxJS mastery, async pipes, declarative templates, reactive thinking
+     @Component({
+       template: `
+         <!-- async pipe does the subscribing/unsubscribing automatically in the template -->
+         <ng-container *ngIf="user$ | async as userState">
+           <div *ngIf="userState.loading">Loading...</div>
+           <div *ngIf="userState.error" class="error">{{ userState.error }}</div>
+           <div *ngIf="userState.data">
+             <h2>{{ userState.data.name }}</h2>
+             <p>{{ userState.data.email }}</p>
+           </div>
+         </ng-container>
+         <button (click)="reload$.next()">Reload</button>
+       `
+     })
+     export class UserProfileComponent {
+       private reload$ = new BehaviorSubject<void>(undefined);
+       
+       user$ = this.reload$.pipe(
+         switchMap(() => {
+           return this.userService.getUser(123).pipe(
+             map(data => ({ data, loading: false, error: '' })),
+             catchError(error => of({ 
+               data: null, 
+               loading: false, 
+               error: 'Failed to load user' 
+             })),
+             startWith({ data: null, loading: true, error: '' })
+           );
+         })
+       );
      
-     try {
-       const userData = await firstValueFrom(this.userService.getUser(123));
-       this.user.set(userData);
-     } catch (err) {
-       this.error.set('Failed to load user');
-     } finally {
-       this.loading.set(false);
+       constructor(private userService: UserService) {}
      }
-   }
- }
-```
+     ```
+</details>
+
+<details>
+    <summary> 🔸 3) 🟢 Typical pattern Angular 16+ days: Modern Hybrid + Signals: Signals wrap observables, template reacts automatically to data. Template just reacts to data  </summary>
+
+    ```js
+    //  Modern Approach: Simple, fine-grained updates, no subscriptions, excellent performance
+    @Component({
+      template: `
+        <div *ngIf="loading()">Loading...</div>
+        <div *ngIf="error()" class="error">{{ error() }}</div>
+        <div *ngIf="user()">
+          <h2>{{ user()!.name }}</h2>
+          <p>{{ user()!.email }}</p>
+        </div>
+        <button (click)="loadUser()">Reload</button>
+      `
+    })
+    export class UserProfileComponent {
+      user = signal<any>(null);
+      loading = signal(false);
+      error = signal('');
+    
+      constructor(private userService: UserService) {
+        this.loadUser();
+      }
+    
+      async loadUser() {
+        this.loading.set(true);
+        this.error.set('');
+        
+        try {
+          const userData = await firstValueFrom(this.userService.getUser(123));
+          this.user.set(userData);
+        } catch (err) {
+          this.error.set('Failed to load user');
+        } finally {
+          this.loading.set(false);
+        }
+      }
+    }
+    ```
+</details>
 
 
 ## If we zoom out:
@@ -174,10 +188,11 @@ Zones → RxJS
 ```
 
 
-💡 Keynotes:
-🔴 → 🟡: Gained reactivity but added complexity
-🟡 → 🟢: Kept reactivity but reduced complexity
+💡 Keynotes: <br>
+🔴 → 🟡: Gained reactivity but added complexity <br>
+🟡 → 🟢: Kept reactivity but reduced complexity <br>
 
+---
 
 ## 🟨 Real Analogy Observables * Signals
 
@@ -199,9 +214,9 @@ Zones → RxJS
 - `mutable value` The value inside the signal can be changed
 
 
-🤔 Real Analogy
+💡 Keynotes:
+Real Analogy
 → Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
-
 → Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
 
 
@@ -347,28 +362,12 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 Angular Change-Detection & Signals
-
-Angular is transitioning to fine-grained reactivity. Because with default change detection, there is no way for Angular to know exactly what has changed on the page, so that is why we cannot make any "assumptions" about what happened, and we need to check everything.
-
-> Signals are all about enabling very fine-grained updates to the DOM that are just not possible with the current change detection systems that we have available.
-
-
-
---------------------------------------------------------------------------------------------------------------------
-
 # 🟩 5. A real world example 
 
 > Implemented signal common patterns like Signal Batch Updates
 
 ## signal-input-pattern architecture
 ## Derived State: 
-Use computed/createMemo for expensive calculations or values that depend on other signals.
-
-```js
-const isEven = createMemo(() => count() % 2 === 0);
-```
-
 ## Signal Batch Updates: 
 When a signal changes, Angular schedules change detection for the components that read that signal.
 
@@ -381,9 +380,6 @@ batch(() => {
   setLastName("Doe");
 }); // Effect depending on name runs only once.
 ```
-
-Converting Observables <-> Signals:
-
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -474,11 +470,11 @@ Converting Observables <-> Signals:
 
 # 🟩 THANKS!
 
-🚀 More reading:
-💻 Signals & JS Event Loop: Rethinking Angular Reactive Sync
+🚀 More reading: <br>
+💻 Signals & JS Event Loop: Rethinking Angular Reactive Sync: <br>
 https://dev.to/leolanese/signals-js-event-loop-rethinking-angular-reactive-sync-48bn
 
-💻 Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+):
+💻 Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+): <br>
 Angular traditionally offers template-driven and reactive forms. Template-driven forms use ngModel bindings and directives (e.g. NgForm, NgModel) in the template. Reactive forms (via @angular/forms) use FormControl and FormGroup classes to manage form state explicitly. Now, Angular also introduce Signals, a fine-grained reactivity model reducing boilerplate and improving reactivity.
 https://github.com/leolanese/Angular-Signal-ReactiveForms
 
