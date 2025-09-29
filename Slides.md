@@ -2,13 +2,13 @@
 
 > State isn't just data. It's behaviour waiting to happen!
 
-🔸1. Why This Matters? <br>
-🔸2. The Reactive Mindset shift <br>
-🔸3. Understanding Signals <br>
-   🔸🔸Definition <br>
-   🔸🔸How to update and read signal value <br>
+🟦 1. Why This Matters? <br>
+🟦 2. The Reactive Mindset shift <br>
+🟦 3. Understanding Signals <br>
+  🔸Definition <br>
+  🔸How to update and read signal value <br>
 
-🔸5. A real example <br>
+🟦 5. A real example <br>
 
 
 
@@ -18,7 +18,7 @@
 
 🔸 `ZoneLess`: Signal can work with or without ZoneJS <br>
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
-🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward`. <br>
+🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward` with . <br>
 
 ## So, why again?
 🔸Less boilerplate code + fewer bugs + faster Apps = Happier Devs! 
@@ -34,15 +34,8 @@
 → Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display") 
 → Angular 16+ days: Modern declarative hybrid + Signals and reactive state 
 
-## If you zoom out:
-```js
-Zones → RxJS
-        + async pipe → Signals
-                          + fine-grained reactivity + ZoneLess
-```
 
-
-→ Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
+🟦 Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
 
 We're already working with Observables and streams, but the way most Devs used it wasn't really reactive in the "declarative" sense,
 it was imperative plumbing around a reactive library.
@@ -62,7 +55,7 @@ ngOnDestroy() {
 ```
 
 
-→ Typical Angular 12–16 days: Declarative template binding (async pipe) 
+🟦 Typical Angular 12–16 days: Declarative template binding (async pipe) 
 
 async pipe does the subscribing/unsubscribing automatically in the template
 
@@ -71,102 +64,115 @@ async pipe does the subscribing/unsubscribing automatically in the template
 ```
 
 
-→ Typical pattern Angular 16+ days: Signals wrap observables, template reacts automatically to data. Template just reacts to data
+🟦 Typical pattern Angular 16+ days: Signals wrap observables, template reacts automatically to data. Template just reacts to data
 
 ```js
 data = toSignal(this.service.getData());
+```
+
+
+## If we zoom out:
+```js
+Zones → RxJS
+        + async pipe → Signals
+                          + fine-grained reactivity + ZoneLess
 ```
 
 --------------------------------------------------------------------------------------------------------------------
 
 # 🟩 3. Understanding Signals
 
-🤔 What Are Signals?
-🚨 Signals are `primitive` `reactive unit` and `immutable containers` that hold a `single value`, but the `value itself can be change` through `designated Signal API methods`. This `change (primitives) triggers change detection. When mutation (object/arrays) don't`.
+🤔 What Are Angular Signals?
+🚨 Signals are `reactive primitives` that hold a `single value`. `Any Changes through Signal API methods trigger Change-Detection`. `Direct mutation of Object/Array values without these methods WON'T trigger updates`.
 
-- `change triggers change detection. When mutation don't`
-For primitives: No issue, since you always replace the value.
-```js
-const count = signal(0);
-const name = signal('John');
-const active = signal(true);
+📌 - `reactive primitives` → Are simple basic building reactive blocks
+📌 - `single value` → Each signal contains one value. which can be a primitive, Object, or Array. Each signal manages one atomic state unit that enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
+📌 - `Changes through Signal API methods trigger Change-Detection` Using API Signal methods: set(), update(). mutation() trigger Angular Change-Detection (they intended to make the reactive always trigger: AS we can have primitives, change (primitives) triggers change detection, and Object/Arrays (mutation (object/arrays) don't trigger CD))
+📌 - `Direct mutation of object/array values without these methods won't trigger updates` While Signals are immutable containers, if the value they hold is a reference (like an Object or Array), that reference can be mutated directly, which bypasses Angular reactivity system (if we mutate the Object or Array inside a signal without replacing the reference, Angular doesn't know anything changed, so Change-Detection won't run)
 
-// ✅ Always works - primitives are inherently immutable
-count.set(5);           // Replacement is the only option
-name.set('Jane');       // Can't mutate strings anyway
-active.set(false);      // No way to accidentally mutate
-```
+🚨 Signals automatically detect primitive value changes (string, number, boolean, bitint, symbol, undefined, null) pass-by-value behavior, BUT require explicit Signal API calls for Object/Array mutations due to JS pass-by-reference behavior
 
-For Objects/Arrays: The Pitfall Zone
-```js
-const user = signal({name: 'John', age: 30});
-const items = signal(['apple', 'banana']);
+💡 Key Takeway: 
+Always use set(), update(), or mutate(), never modify signal values directly!
 
-// ❌ SILENT BUGS - mutation doesn't trigger reactivity
-user().name = 'Jane';       // UI won't update!
-items().push('orange');     // No change detection!
+<details>
+    <summary> Examples </summary>
+      ```js
+      // ✅ SINGLE values
+      const count = signal(0);           // Single number
+      const name = signal('John');       // Single string  
+      const isLoading = signal(false);   // Single boolean
+      
+      // ✅ Also SINGLE values (Arrays and object)
+      const user = signal({name: 'John', age: 30});     // Single object
+      const items = signal(['apple', 'banana']);        // Single array
+      ```
 
-// ✅ CORRECT - replacement triggers reactivity
-user.set({...user(), name: 'Jane'});
-items.set([...items(), 'orange']);
-```
-
-- `primitive` are simple fundamental building block
-- `reactive Unit` When the signal value changes, it automatically notifies
-- `shell containers` The signal itself is not the value. A signal acts as a "shell" or a "wrapper" around the actual data. We interact with the container to get or set the value
-- `single Value` which can be a primitive, object, or array. Each signal manages one atomic state unit enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
-
-```js
-// ✅ SINGLE values
-const count = signal(0);           // Single number
-const name = signal('John');       // Single string  
-const isLoading = signal(false);   // Single boolean
-
-// ✅ Also SINGLE values (Arrays and object)
-const user = signal({name: 'John', age: 30});     // Single object
-const items = signal(['apple', 'banana']);        // Single array
-```
-
-```js
-// ❌ Multiple independent states bundled together
-const userState = signal({
-  name: 'John',
-  age: 30,
-  isLoading: false,
-  error: null
-});
-
-// ✅ Separate signals for independent concerns
-const userName = signal('John');
-const userAge = signal(30);
-const isLoading = signal(false);
-const error = signal(null);
-```
-
-```js
-// ❌ This is NOT what signals are for (multiple independent values)
-const multipleValues = signal(['John', 30, false]); // Hard to manage
-
-// ❌ NOT like RxJS streams that emit multiple values over time
-const stream$ = new Subject(); // Can emit many values
-stream$.next(1);
-stream$.next(2);
-stream$.next(3);
-```
-
-- `value itself can be change`
-🚨 While Signals are immutable containers, if the value they hold is a reference (like an object or array), that reference can be mutated directly, which bypasses Angular reactivity system (if you mutate the object or array inside a signal without replacing the reference, Angular won't know anything changed, so change detection won't run)
-🚨 Signals hold an immutable value, but the signal reference itself is mutable, that why we can change the value of a signal because objects and arrays are passed by reference in JS
-
-```js
-const user = signal({name: 'John'});
-
-// ❌ "Just mutated" - no change detection
-user().name = 'Jane';  // Angular ignores this
-
-// ✅ "Value changed" - triggers change detection  
-user.set({name: 'Jane'});  // Angular detects this
-```
+      ```js
+      // ❌ Multiple independent states bundled together
+      const userState = signal({
+        name: 'John',
+        age: 30,
+        isLoading: false,
+        error: null
+      });
+      
+      // ✅ Separate signals for independent concerns
+      const userName = signal('John');
+      const userAge = signal(30);
+      const isLoading = signal(false);
+      const error = signal(null);
+      ```
+      
+      ```js
+      // ❌ This is NOT what signals are for (multiple independent values)
+      const multipleValues = signal(['John', 30, false]); // Hard to manage
+      
+      // ❌ NOT like RxJS streams that emit multiple values over time
+      const stream$ = new Subject(); // Can emit many values
+      stream$.next(1);
+      stream$.next(2);
+      stream$.next(3);
+      ```
+      
+      
+      ```js
+      const user = signal({name: 'John'});
+      
+      // ❌ "Just mutated" - no change detection
+      user().name = 'Jane';  // Angular ignores this
+      
+      // ✅ "Value changed" - triggers change detection  
+      user.set({name: 'Jane'});  // Angular detects this
+      ```
+      
+      - `change triggers change detection. When mutation don't`
+      For primitives: No issue, since you always replace the value.
+      ```js
+      const count = signal(0);
+      const name = signal('John');
+      const active = signal(true);
+      
+      // ✅ Always works - primitives are inherently immutable
+      count.set(5);           // Replacement is the only option
+      name.set('Jane');       // Can't mutate strings anyway
+      active.set(false);      // No way to accidentally mutate
+      ```
+      
+      For Objects/Arrays: The Pitfall Zone
+      ```js
+      const user = signal({name: 'John', age: 30});
+      const items = signal(['apple', 'banana']);
+      
+      // ❌ SILENT BUGS - mutation doesn't trigger reactivity
+      user().name = 'Jane';       // UI won't update!
+      items().push('orange');     // No change detection!
+      
+      // ✅ CORRECT - replacement triggers reactivity
+      user.set({...user(), name: 'Jane'});
+      items.set([...items(), 'orange']);
+      ```
+</details>
 
 
 # 🟩 Immutable Container, Mutable Value
@@ -350,6 +356,7 @@ Converting Observables <-> Signals:
     const count$ = toObservable(count);
 
  </details>
+ 
  <details>
    <summary>🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values.</summary>
 
@@ -367,6 +374,7 @@ Converting Observables <-> Signals:
     user = input<User>(); // Signal input
     userName = computed(() => this.user()?.name || 'Nop, no idea how you are!');
  </details>
+ 
 <details>
   <summary>🔸Angular favour signal() / computed() / effect() for component-local or simple service state, reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc).</summary>
     
@@ -377,6 +385,7 @@ Converting Observables <-> Signals:
     // ✅ better do
     count = signal(0);
 </details>
+
 <details>
   <summary>🔸Signals don't replace Observables. </summary>
     
@@ -391,11 +400,11 @@ Converting Observables <-> Signals:
 
 # 🟩 THANKS!
 
-More reading:
-Signals & JS Event Loop: Rethinking Angular Reactive Sync
+🚀 More reading:
+💻 Signals & JS Event Loop: Rethinking Angular Reactive Sync
 https://dev.to/leolanese/signals-js-event-loop-rethinking-angular-reactive-sync-48bn
 
-Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+):
+💻 Angular Reactive Forms with Signals (Angular 17+) and Signal-Based Forms (Angular 21+):
 Angular traditionally offers template-driven and reactive forms. Template-driven forms use ngModel bindings and directives (e.g. NgForm, NgModel) in the template. Reactive forms (via @angular/forms) use FormControl and FormGroup classes to manage form state explicitly. Now, Angular also introduce Signals, a fine-grained reactivity model reducing boilerplate and improving reactivity.
 https://github.com/leolanese/Angular-Signal-ReactiveForms
 
