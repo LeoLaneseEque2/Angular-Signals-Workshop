@@ -1,4 +1,4 @@
-🟩 Workshop Evolving Angular: Imperative → Reactive → Signals. The New Angular Mindset
+🟩 Workshop Evolving Angular: 🔴 Imperative → 🟡 Reactive → 🟢 Signals. The New Angular Mindset
 
 > State isn't just data. It's behaviour waiting to happen!
 
@@ -174,6 +174,9 @@ Zones → RxJS
 ```
 
 
+💡 Keynotes:
+🔴 → 🟡: Gained reactivity but added complexity
+🟡 → 🟢: Kept reactivity but reduced complexity
 
 
 ## 🟨 Real Analogy Observables * Signals
@@ -197,9 +200,9 @@ Zones → RxJS
 
 
 🤔 Real Analogy
-Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
+→ Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
 
-Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
+→ Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -221,7 +224,7 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 
 <details>
     <summary> Examples </summary>
-      ```js
+       ```js
       // ✅ SINGLE values
       const count = signal(0);           // Single number
       const name = signal('John');       // Single string  
