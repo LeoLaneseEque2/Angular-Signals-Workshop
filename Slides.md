@@ -4,9 +4,11 @@
 
 🟦 1. Why This Matters? <br>
 🟦 2. The Reactive Mindset shift <br>
+  🟨 Angular patterns as the days go by <br>
+  🟨 Real Analogy Observables & Signals <br>
 🟦 3. Understanding Signals <br>
-  🔸Definition <br>
-  🔸How to update and read signal value <br>
+  🟨 Definition <br>
+  🟨 How to update and read signal value <br>
 
 🟦 5. A real example <br>
 
@@ -14,7 +16,7 @@
 
 -------------------------------------------------------------------------------------------------
 
-🟩 1. Why This Matters? 
+🟦 1. Why This Matters? 
 
 🔸 `ZoneLess`: Signal can work with or without ZoneJS <br>
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
@@ -25,7 +27,11 @@
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 2. The Reactive Mindset shift
+# 🟦 2. The Reactive Mindset shift
+
+🟨 Angular patterns as the days go by
+
+🟥 Angular 2–12 days
 
 > Angular Signals Change the Way We Build Angular Apps
 
@@ -35,7 +41,7 @@
 → Angular 16+ days: Modern declarative hybrid + Signals and reactive state  <br>
 
 
-🟦 Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
+🟥 Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
 
 We're already working with Observables and streams, but the way most Devs used it wasn't really reactive in the "declarative" sense,
 it was imperative plumbing around a reactive library.
@@ -55,17 +61,14 @@ ngOnDestroy() {
 ```
 
 
-🟦 Typical Angular 12–16 days: Declarative template binding (async pipe) 
+🟥 Typical Angular 12–16 days: Declarative template binding (async pipe) 
 
 async pipe does the subscribing/unsubscribing automatically in the template
-
 ```js
 {{ (service.getData() | async)?.name }}
 ```
 
-
-🟦 Typical pattern Angular 16+ days: Signals wrap observables, template reacts automatically to data. Template just reacts to data
-
+Typical pattern Angular 16+ days: Signals wrap observables, template reacts automatically to data. Template just reacts to data
 ```js
 data = toSignal(this.service.getData());
 ```
@@ -77,6 +80,33 @@ Zones → RxJS
         + async pipe → Signals
                           + fine-grained reactivity + ZoneLess
 ```
+
+
+## 🟨 Real Analogy Observables * Signals
+
+🤔 Observables
+> Are a `lazy`, `push`, `collection` of `multple values`
+
+- `lazy` Need to subscribe to it
+- `push` Observables$ push values to consumer
+- `collection` because are collections of data, similar to Arrays
+- `multiple values` because Observables can produce 0,1, or many values over time. Instantly, slowly or never
+
+🤔 Signals
+
+> Are an `eager`, `reactive`, `single-value` primitive containing `mutable value`
+
+- `eager` Always holds a value, no need to subscribe
+- `reactive` Changes automatically trigger Angular’s change detection
+- `single-value` Holds exactly one value at a time
+- `mutable value` The value inside the signal can be changed
+
+
+🤔 Real Analogy
+Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
+
+Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -174,48 +204,48 @@ Always use set(), update(), or mutate(), never modify signal values directly!
       ```
 
       ```js
-    import { signal, effect } from '@angular/core';
-    
-    // Create a signal holding an object
-    const userSignal = signal({ name: 'Alice', age: 25 });
-    
-    // Reactive effect that logs whenever the signal changes
-    effect(() => {
-      console.log('User changed:', userSignal());
-    });
-    
-    // ---- MUTATION ----
-    // Directly mutating the object inside the signal
-    userSignal().age = 26;  
-    // ❌ This does NOT trigger the effect, no change detection happens
-    
-    // ---- REPLACEMENT ----
-    // Replacing the whole value with a new object creates a new reference, which triggers CD and any effects
-    userSignal({ ...userSignal(), age: 26 });  
-    // ✅ This triggers the effect and Angular reacts
-    ```
-    
-    - `designated Signal API methods`
-    ```js
-    // Creation with options
-    const user = signal({name: 'John'}, {
-      equal: (a, b) => a.name === b.name,  // Custom equality
-    });
-    
-    // Read value
-    const user = user();
-    const name = user().name;
-    
-    // Write value
-    user.set({name: 'Jane'});
-    user.update(u => ({...u, age: 30}));
-    
-    // Readonly view
-    const readOnlyUser = user.asReadonly();
-    
-    // Derived signal
-    const greeting = computed(() => `Hello ${user().name}`);
-    ```
+      import { signal, effect } from '@angular/core';
+      
+      // Create a signal holding an object
+      const userSignal = signal({ name: 'Alice', age: 25 });
+      
+      // Reactive effect that logs whenever the signal changes
+      effect(() => {
+        console.log('User changed:', userSignal());
+      });
+      
+      // ---- MUTATION ----
+      // Directly mutating the object inside the signal
+      userSignal().age = 26;  
+      // ❌ This does NOT trigger the effect, no change detection happens
+      
+      // ---- REPLACEMENT ----
+      // Replacing the whole value with a new object creates a new reference, which triggers CD and any effects
+      userSignal({ ...userSignal(), age: 26 });  
+      // ✅ This triggers the effect and Angular reacts
+      ```
+      
+      - `designated Signal API methods`
+      ```js
+      // Creation with options
+      const user = signal({name: 'John'}, {
+        equal: (a, b) => a.name === b.name,  // Custom equality
+      });
+      
+      // Read value
+      const user = user();
+      const name = user().name;
+      
+      // Write value
+      user.set({name: 'Jane'});
+      user.update(u => ({...u, age: 30}));
+      
+      // Readonly view
+      const readOnlyUser = user.asReadonly();
+      
+      // Derived signal
+      const greeting = computed(() => `Hello ${user().name}`);
+      ```
 </details>
 
 
@@ -237,28 +267,6 @@ user.set({name: 'Jane'})	The signal's internal state	    ✅ Yes
 Each signal holds one value. The value can be primitive (number, string, etc) or a reference (object, array).
 
 
-🤔 Observables
-> Are a `lazy`, `push`, `collection` of `multple values`
-
-- `lazy` Need to subscribe to it
-- `push` Observables$ push values to consumer
-- `collection` because are collections of data, similar to Arrays
-- `multiple values` because Observables can produce 0,1, or many values over time. Instantly, slowly or never
-
-🤔 Signals
-
-> Are an `eager`, `reactive`, `single-value` primitive containing `mutable value`
-
-- `eager` Always holds a value, no need to subscribe
-- `reactive` Changes automatically trigger Angular’s change detection
-- `single-value` Holds exactly one value at a time
-- `mutable value` The value inside the signal can be changed
-
-
-🤔 Real Analogy
-Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. 
-
-Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly.
 
 --------------------------------------------------------------------------------------------------------------------
 
