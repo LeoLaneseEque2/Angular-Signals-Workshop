@@ -3,7 +3,6 @@
 > State isn't just data. It's behaviour waiting to happen!
 
 🟦 [1. Why This Matters?](#1-why-this-matters) <br>
-
 -- 🟨 [Real World Example: E-commerce table product](#real-world-example-e-commerce-table-product) <br>
 🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift) <br>
 -- 🟨 [Angular patterns as the days go by](#angular-patterns-as-the-days-go-by) <br>
