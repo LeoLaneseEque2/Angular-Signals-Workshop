@@ -1,6 +1,8 @@
 # Eq2 Workshop 
 
-```js
+```ts
 "State isn't just data, it's behaviour waiting to happen."
-Workshop: Evolving Angular: From Imperative → Reactive → Signals. The New Angular Mindset
+
+Workshop:
+      Evolving Angular: From Imperative → Reactive → Signals. The New Angular Mindset
 ```
