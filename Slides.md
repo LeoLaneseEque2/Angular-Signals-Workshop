@@ -6,15 +6,16 @@
  -- 🟨 Real word Example: E-commerce table product
 🟦 2. The Reactive Mindset shift <br>
  -- 🟨 Angular patterns as the days go by <br>
- -- 🟨 Real Analogy Observables & Signals <br>
+ -- 🟨 A fancy Analogy: Observables & Signals <br>
 🟦 3. Understanding Signals <br>
  -- 🟨 Definition <br>
  -- 🟨 How to update and read signal value <br>
 
 🟦 5. A real world example <br>
 
-
+<br><br>
 -------------------------------------------------------------------------------------------------
+<br><br>
 
 ## 🟦 1. Why This Matters? 
 
@@ -93,7 +94,9 @@ In othe words: <br>
 🔸 Angular Signals Change the Way We Build Angular Apps: <br> 
 Gentle learning curve + Less boilerplate code + fewer bugs + faster Apps = Happier Devs! <br>
 
---------------------------------------------------------------------------------------------------------------------
+<br><br>
+-------------------------------------------------------------------------------------------------
+<br><br>
 
 ## 🟦 2. The Reactive Mindset shift
 
@@ -159,7 +162,6 @@ it was imperative plumbing around a reactive library.
     }
     ```
 </details>
-
 
 
 <details>
@@ -259,9 +261,9 @@ Zones → RxJS
 🔴 → 🟡: Gained reactivity but added complexity <br>
 🟡 → 🟢: Kept reactivity but reduced complexity <br>
 
----
 
-## 🟨 Real Analogy Observables * Signals
+
+## 🟨 A fancy Analogy: Observables & Signals
 
 🤔 Observables
 > Are a `lazy`, `push`, `collection` of `multple values`
@@ -287,7 +289,9 @@ Real Analogy <br>
 → Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
 
 
---------------------------------------------------------------------------------------------------------------------
+<br><br>
+-------------------------------------------------------------------------------------------------
+<br><br>
 
 ## 🟩 3. Understanding Signals
 
@@ -427,7 +431,9 @@ Always use set(), update(), or mutate(), never modify signal values directly!
       ```
 </details>
 
---------------------------------------------------------------------------------------------------------------------
+<br><br>
+-------------------------------------------------------------------------------------------------
+<br><br>
 
 # 🟩 Best Practices & Quick Notes
    
