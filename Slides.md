@@ -19,16 +19,25 @@
 ## 🟦 1. Why This Matters? 
 
 🔸 `ZoneLess`: Signal can work with or without ZoneJS magic <br>
+
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
+
 🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward` with . <br>
 
 🔸Signals break the blanket dependency on event loop + ZoneJS:  No more "Blanket dependency", means Angular was completely dependent on the event loop + Zone.js for every single change detection cycle. Signals step in by  **breaking the blanket dependency** on the `event loop + ZoneJS`. Instead of waiting for any microtask to finish, a Signal knows exactly which pieces of state are "watched" by which consumers.
+
+🔸 Signals break the **blanket dependency** on event loop + ZoneJS: **What was "blanket dependency"?** Angular was completely dependent on the event loop + ZoneJS for every single Change-Detection cycle. Signals step in by breaking this dependency. Instead of waiting for any Microtask to finish, a signal knows exactly which pieces of state are "watched" by which consumers. <br>
+In othe words: <br>
+BEFORE Any Change → 🛡️ ZoneJS Blanket → Check Entire App. SIGNALS: Signal Change → 🎯 Direct Update → Only Affected Components = Signals eliminate the need for blanket change detection by knowing exactly what to update.
+
+Real-World Performance Gains: 
+Large App (500+ components) = Improvement: 95%+ reduction in unnecessary checks
 
 
 
 ## 💥 So, why again? <br>
 🔸 Angular Signals Change the Way We Build Angular Apps: <br> 
-Less boilerplate code + Gentle learning curve + fewer bugs + faster Apps = Happier Devs! <br>
+Gentle learning curve + Less boilerplate code + fewer bugs + faster Apps = Happier Devs! <br>
 
 --------------------------------------------------------------------------------------------------------------------
 
