@@ -214,8 +214,8 @@ Zones → RxJS
 - `mutable value` The value inside the signal can be changed
 
 
-💡 Keynotes:
-Real Analogy
+💡 Keynotes: <br>
+Real Analogy <br>
 → Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
 → Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
 
