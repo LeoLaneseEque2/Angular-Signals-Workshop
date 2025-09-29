@@ -3,7 +3,7 @@
 > State isn't just data. It's behaviour waiting to happen!
 
 🔸1. Why This Matters? <br>
-🔸2. Angular short evolution <br>
+🔸2. The Mindset shift <br>
 🔸3. Understanding Signals <br>
    🔸🔸Definition <br>
    🔸🔸How to update and read signal value <br>
@@ -31,7 +31,7 @@
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 2. Angular short evolution
+# 🟩 2. The Mindset shift
 
 > Angular Signals Change the Way We Build Angular Apps
 
