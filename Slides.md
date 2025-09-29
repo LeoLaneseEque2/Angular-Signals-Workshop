@@ -4,13 +4,13 @@
 
 🟦 1. Why This Matters? <br>
 🟦 2. The Reactive Mindset shift <br>
-  🟨 Angular patterns as the days go by <br>
-  🟨 Real Analogy Observables & Signals <br>
+ -- 🟨 Angular patterns as the days go by <br>
+ -- 🟨 Real Analogy Observables & Signals <br>
 🟦 3. Understanding Signals <br>
-  🟨 Definition <br>
-  🟨 How to update and read signal value <br>
+ -- 🟨 Definition <br>
+ -- 🟨 How to update and read signal value <br>
 
-🟦 5. A real example <br>
+🟦 5. A real world example <br>
 
 
 
@@ -22,7 +22,7 @@
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
 🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward` with . <br>
 
-## So, why again?
+## 💥 So, why again?
 🔸Less boilerplate code + fewer bugs + faster Apps = Happier Devs! <br>
 
 --------------------------------------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ Instead, Signals are more like a glass of water, always present, always filled, 
 > 🚨 Signals are `reactive primitives` that hold a `single value`. `Any Changes through Signal API methods trigger Change-Detection`. `Direct mutation of Object/Array values without these methods WON'T trigger updates`.
 
 - 📌 `reactive primitives` → Are simple basic building reactive blocks
-- 📌 `single value` → Each signal contains one value. which can be a primitive, Object, or Array. Each signal manages one atomic state unit that enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
+- 📌 `single value` → Each signal contains one value. The value can be primitive (number, string, etc) or a reference (object, array). Each signal manages one atomic state unit that enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
 - 📌 `Changes through Signal API methods trigger Change-Detection` Using API Signal methods: set(), update(). mutation() trigger Angular Change-Detection (they intended to make the reactive always trigger: AS we can have primitives, change (primitives) triggers change detection, and Object/Arrays (mutation (object/arrays) don't trigger CD))
 - 📌 `Direct mutation of object/array values without these methods won't trigger updates` While Signals are immutable containers, if the value they hold is a reference (like an Object or Array), that reference can be mutated directly, which bypasses Angular reactivity system (if we mutate the Object or Array inside a signal without replacing the reference, Angular doesn't know anything changed, so Change-Detection won't run)
 
@@ -248,26 +248,6 @@ Always use set(), update(), or mutate(), never modify signal values directly!
       ```
 </details>
 
-
---------------------------------------------------------------------------------------------------------------------
-
-# 🟩 Incremental CD
-
-When a signal value is replaced/change, the signal is marked as dirty, not the entire component.
-Angular CD then runs incrementally, updating only the parts that actually read the changed signal.
-
-
-
-Operation	                What Gets Mutated	            Triggers CD?
-user().name = 'Jane'	    The value object	              ❌ No
-user.set({name: 'Jane'})	The signal's internal state	    ✅ Yes
-
-
-🟩 Signals are primitive reactive units
-Each signal holds one value. The value can be primitive (number, string, etc) or a reference (object, array).
-
-
-
 --------------------------------------------------------------------------------------------------------------------
 
 # 🟩 Angular Change-Detection & Signals
@@ -278,11 +258,9 @@ Angular is transitioning to fine-grained reactivity. Because with default change
 
 
 
-
-
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 5. A real example 
+# 🟩 5. A real world example 
 
 > Implemented signal common patterns like Signal Batch Updates
 
