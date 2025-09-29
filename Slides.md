@@ -16,18 +16,12 @@
 
 🟩 1. Why This Matters? 
 
-🔸 Signals in Templates: Less Boilerplate <br>
-🔸 Smarter Change Detection: Updating Only What's Needed <br>
-🔸 Signal can work with ZoneJS (zoneless) <br>
-🔸 Signals bring explicit reads/writes: We don't just have a blob of state sitting in a component and hope Angular notices changes. You read a signal value when you need it, and you write to it explicitly <br>
-🔸 No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
-🔸 Signals make CD OnPush optional: Signals work perfectly without OnPush, but adding OnPush just removes the default "check every component each cycle" safety net and leans fully on the signals mechanism <br>
-🔸 Angular Signal is considered a best-practices: Prefer Signals, Over BehaviorSubjects for State Management, Prefer signal input/out, Prefer Signal forms in Angular 21+ instead reactive-forms or template-driven forms <br>
-🔸 Angular Team transitioning from ZoneJS, to fine-grained reactivity
-🔸 Signals are no longer "just another feature", they're the core of Angular’s reactivity going forward.
+🔸 `ZoneLess`: Signal can work with ZoneJS <br>
+🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
+🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward`. <br>
 
 ## So, why again?
-🔸Less code + fewer bugs + faster Apps = Happier Devs! 
+🔸Less boilerplate code + fewer bugs + faster Apps = Happier Devs! 
 
 --------------------------------------------------------------------------------------------------------------------
 
