@@ -89,6 +89,14 @@ In othe words: <br>
       ```
 </details>
 
+| Performance Metric | 🔴 Zone.js | 🟢 Signals | 🚀 Improvement |
+|-------------------|------------|------------|----------------|
+| **Components Checked** | 50+ | 1 | ⬇️ 98% reduction |
+| **Change Detection Time** | 15-20ms | 0.5-1ms | ⚡ 95% faster |
+| **Memory Operations** | 1000+ | 20-30 | 🧠 97% reduction |
+| **UI Thread Blocking** | Noticeable jank | Smooth | 🎯 Jank eliminated |
+
+- Jank occurs when the browser can't maintain a smooth 60 FPS (frames per second). Each frame has only ~16.6ms to render, and if JavaScript execution takes longer, frames get dropped. This affect UX: Buttons feel "laggy" when clicked
 
 ## 💥 So, why again? <br>
 🔸 Angular Signals Change the Way We Build Angular Apps: <br> 
