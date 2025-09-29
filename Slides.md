@@ -21,7 +21,7 @@
 🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward` with . <br>
 
 ## So, why again?
-🔸Less boilerplate code + fewer bugs + faster Apps = Happier Devs! 
+🔸Less boilerplate code + fewer bugs + faster Apps = Happier Devs! <br>
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -29,10 +29,10 @@
 
 > Angular Signals Change the Way We Build Angular Apps
 
-## Angular progression as days going by:
-→ Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS 
-→ Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display") 
-→ Angular 16+ days: Modern declarative hybrid + Signals and reactive state 
+## Angular progression as days going by: 
+→ Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS  <br>
+→ Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display")  <br>
+→ Angular 16+ days: Modern declarative hybrid + Signals and reactive state  <br>
 
 
 🟦 Typical Angular 2–12: Imperative, manual subscribe/unsubscribe 
@@ -82,15 +82,15 @@ Zones → RxJS
 
 # 🟩 3. Understanding Signals
 
-🤔 What Are Angular Signals?
-🚨 Signals are `reactive primitives` that hold a `single value`. `Any Changes through Signal API methods trigger Change-Detection`. `Direct mutation of Object/Array values without these methods WON'T trigger updates`.
+## 🤔 What Are Angular Signals?
+> 🚨 Signals are `reactive primitives` that hold a `single value`. `Any Changes through Signal API methods trigger Change-Detection`. `Direct mutation of Object/Array values without these methods WON'T trigger updates`.
 
-📌 - `reactive primitives` → Are simple basic building reactive blocks
-📌 - `single value` → Each signal contains one value. which can be a primitive, Object, or Array. Each signal manages one atomic state unit that enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
-📌 - `Changes through Signal API methods trigger Change-Detection` Using API Signal methods: set(), update(). mutation() trigger Angular Change-Detection (they intended to make the reactive always trigger: AS we can have primitives, change (primitives) triggers change detection, and Object/Arrays (mutation (object/arrays) don't trigger CD))
-📌 - `Direct mutation of object/array values without these methods won't trigger updates` While Signals are immutable containers, if the value they hold is a reference (like an Object or Array), that reference can be mutated directly, which bypasses Angular reactivity system (if we mutate the Object or Array inside a signal without replacing the reference, Angular doesn't know anything changed, so Change-Detection won't run)
+- 📌 `reactive primitives` → Are simple basic building reactive blocks
+- 📌 `single value` → Each signal contains one value. which can be a primitive, Object, or Array. Each signal manages one atomic state unit that enables fine-grained reactivity. This "single value" principle is what makes signals so efficient for Angular Change Detection system!
+- 📌 `Changes through Signal API methods trigger Change-Detection` Using API Signal methods: set(), update(). mutation() trigger Angular Change-Detection (they intended to make the reactive always trigger: AS we can have primitives, change (primitives) triggers change detection, and Object/Arrays (mutation (object/arrays) don't trigger CD))
+- 📌 `Direct mutation of object/array values without these methods won't trigger updates` While Signals are immutable containers, if the value they hold is a reference (like an Object or Array), that reference can be mutated directly, which bypasses Angular reactivity system (if we mutate the Object or Array inside a signal without replacing the reference, Angular doesn't know anything changed, so Change-Detection won't run)
 
-🚨 Signals automatically detect primitive value changes (string, number, boolean, bitint, symbol, undefined, null) pass-by-value behavior, BUT require explicit Signal API calls for Object/Array mutations due to JS pass-by-reference behavior
+🚨 Signals automatically detect primitive value changes (string, number, boolean, bitint, symbol, undefined, null) pass-by-value behavior, BUT require explicit Signal API calls for Object/Array mutations due to JS pass-by-reference behavior <br>
 
 💡 Key Takeway: 
 Always use set(), update(), or mutate(), never modify signal values directly!
@@ -172,60 +172,51 @@ Always use set(), update(), or mutate(), never modify signal values directly!
       user.set({...user(), name: 'Jane'});
       items.set([...items(), 'orange']);
       ```
+
+      ```js
+    import { signal, effect } from '@angular/core';
+    
+    // Create a signal holding an object
+    const userSignal = signal({ name: 'Alice', age: 25 });
+    
+    // Reactive effect that logs whenever the signal changes
+    effect(() => {
+      console.log('User changed:', userSignal());
+    });
+    
+    // ---- MUTATION ----
+    // Directly mutating the object inside the signal
+    userSignal().age = 26;  
+    // ❌ This does NOT trigger the effect, no change detection happens
+    
+    // ---- REPLACEMENT ----
+    // Replacing the whole value with a new object creates a new reference, which triggers CD and any effects
+    userSignal({ ...userSignal(), age: 26 });  
+    // ✅ This triggers the effect and Angular reacts
+    ```
+    
+    - `designated Signal API methods`
+    ```js
+    // Creation with options
+    const user = signal({name: 'John'}, {
+      equal: (a, b) => a.name === b.name,  // Custom equality
+    });
+    
+    // Read value
+    const user = user();
+    const name = user().name;
+    
+    // Write value
+    user.set({name: 'Jane'});
+    user.update(u => ({...u, age: 30}));
+    
+    // Readonly view
+    const readOnlyUser = user.asReadonly();
+    
+    // Derived signal
+    const greeting = computed(() => `Hello ${user().name}`);
+    ```
 </details>
-
-
-# 🟩 Immutable Container, Mutable Value
-🚨 Signals are immutable containers, but the value they hold is not
-🚨 Signals are immutable containers. The reference to the signal itself never changes, but the value inside can be replaced. Only replacing the value triggers change detection, mutating an object inside the signal won't.
-
-```js
-import { signal, effect } from '@angular/core';
-
-// Create a signal holding an object
-const userSignal = signal({ name: 'Alice', age: 25 });
-
-// Reactive effect that logs whenever the signal changes
-effect(() => {
-  console.log('User changed:', userSignal());
-});
-
-// ---- MUTATION ----
-// Directly mutating the object inside the signal
-userSignal().age = 26;  
-// ❌ This does NOT trigger the effect, no change detection happens
-
-// ---- REPLACEMENT ----
-// Replacing the whole value with a new object creates a new reference, which triggers CD and any effects
-userSignal({ ...userSignal(), age: 26 });  
-// ✅ This triggers the effect and Angular reacts
-```
-
-- `designated Signal API methods`
-```js
-// Creation with options
-const user = signal({name: 'John'}, {
-  equal: (a, b) => a.name === b.name,  // Custom equality
-});
-
-// Read value
-const user = user();
-const name = user().name;
-
-// Write value
-user.set({name: 'Jane'});
-user.update(u => ({...u, age: 30}));
-
-// Readonly view
-const readOnlyUser = user.asReadonly();
-
-// Derived signal
-const greeting = computed(() => `Hello ${user().name}`);
-```
-
-- `change (primitives) triggers change detection. When mutation (object/arrays) don't`
-🚨 For primitives: Any change via these methods triggers change detection.
-🚨 For objects/arrays: Only replacing the whole value (not mutating properties/elements) triggers change detection.
 
 
 --------------------------------------------------------------------------------------------------------------------
