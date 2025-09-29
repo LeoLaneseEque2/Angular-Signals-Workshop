@@ -19,43 +19,20 @@ Angular started imperative (Zones, ngOnInit, manual subscribe/unsubscribe) → b
 It's moving from imperative (tell Angular when and how to update) → reactive (declare relationships and let Angular handle propagation)
 
 
-```js
-## Angular 2–11 days
+---
 
-You were already working with Observables and streams. But the way most people used it wasn’t really reactive in the “declarative, hands-off” sense — it was imperative plumbing around a reactive library.
+ZoneJS, CD and Signals:
 
-```js
-// Typical pattern Angular 2–11 days
-// WIGON: Imperative use of a reactive library
-// RxJS used imperatively — you manage subscription lifecycle yourself
-ngOnInit() {
-  this.sub = this.service.getData().subscribe(res => {
-    this.data = res;
-  });
-}
+Zone.js: 
+Zone.js is Just a Notification System
+"Something async happened somewhere!" (Blind notification)
 
-ngOnDestroy() {
-  this.sub.unsubscribe();
-}
-```
+Change Detection: 
+Change Detection is Angular's Response
+"Let me check what changed and update the UI" (Detective work)
 
-
-```js
-<!-- Typical Angular 12–16 days -->
-<!-- Declarative template binding (async pipe) -->
-<!-- async pipe does the subscribing/unsubscribing automatically in the template -->
-{{ (service.getData() | async)?.name }}
-```
-
-
-``js
-// Typical pattern Angular 16+
-// template just reacts to data
-// Signals wrap observables, template reacts automatically to data
-// Declarative state at the component level with signals
-data = toSignal(this.service.getData());
-```
-
+Signals:
+"This specific value changed, and these specific components care"(Precise surgical update)
 
 ---
 
