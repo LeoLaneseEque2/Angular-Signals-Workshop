@@ -16,7 +16,7 @@
 
 -------------------------------------------------------------------------------------------------
 
-🟦 1. Why This Matters? 
+## 🟦 1. Why This Matters? 
 
 🔸 `ZoneLess`: Signal can work with or without ZoneJS magic <br>
 🔸 `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
@@ -28,7 +28,7 @@ Less boilerplate code + Gentle learning curve + fewer bugs + faster Apps = Happi
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟦 2. The Reactive Mindset shift
+## 🟦 2. The Reactive Mindset shift
 
 ## 🟨 Angular progression as days go by: 
 → 1) 🔴 Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS magic, Change-Detection storms, manual cleanup  <br>
@@ -222,9 +222,9 @@ Real Analogy <br>
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 3. Understanding Signals
+## 🟩 3. Understanding Signals
 
-## 🤔 What Are Angular Signals?
+### 🤔 What Are Angular Signals?
 > 🚨 Signals are `reactive primitives` that hold a `single value`. `Any Changes through Signal API methods trigger Change-Detection`. `Direct mutation of Object/Array values without these methods WON'T trigger updates`.
 
 - 📌 `reactive primitives` → Are simple basic building reactive blocks
@@ -362,7 +362,7 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 
 --------------------------------------------------------------------------------------------------------------------
 
-# 🟩 5. A real world example 
+## 🟩 5. A real world example 
 
 > Implemented signal common patterns like Signal Batch Updates
 
