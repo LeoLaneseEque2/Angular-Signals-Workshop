@@ -157,7 +157,7 @@ Gentle learning curve + Less boilerplate code + less bugs + faster Apps + better
 -------------------------------------------------------------------------------------------------
 <br><br>
 
-## 🟦 2. The Reactive Mindset shift
+## 2. The Reactive Mindset shift
 
 ## 🟨 Angular progression as days go by: 
 → 1) 🔴 Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS magic, Change-Detection storms, manual cleanup  <br>
