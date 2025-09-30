@@ -34,7 +34,7 @@
 🔸 `Signals break the **blanket dependency** on event loop + ZoneJS`: **What was "blanket dependency"?** Angular was completely dependent on the event loop + ZoneJS for every single Change-Detection cycle. Signals step in by breaking this dependency. Instead of waiting for any Microtask to finish, a signal knows exactly which pieces of state are "watched" by which consumers. <br>
 In othe words: <br>
 (Traditional Angular) Any Change → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
-(Modern Angular): Signal Change → 🎯 Direct Update → Only Affected Components = Signals eliminate the need for **blanket Change-Ddetection** by "knowing exactly what Components to update" <br>
+(Modern Angular): Signal Change → 🎯 Direct Update → Only Affected Components = Signals eliminate the need for **blanket Change-Detection** by "knowing exactly what Components to update" <br>
 
 <br><br>
 
