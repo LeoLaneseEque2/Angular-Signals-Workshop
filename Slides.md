@@ -374,6 +374,130 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 <details>
     <summary> Examples </summary>
     
+       ```js
+      // ✅ SINGLE values
+      const count = signal(0);           // Single number
+      const name = signal('John');       // Single string  
+      const isLoading = signal(false);   // Single boolean
+      
+      // ✅ Also SINGLE values (Arrays and object)
+      const user = signal({name: 'John', age: 30});     // Single object
+      const items = signal(['apple', 'banana']);        // Single array
+      ```
+
+      ```js
+      // ❌ Multiple independent states bundled together
+      const userState = signal({
+        name: 'John',
+        age: 30,
+        isLoading: false,
+        error: null
+      });
+      
+      // ✅ Separate signals for independent concerns
+      const userName = signal('John');
+      const userAge = signal(30);
+      const isLoading = signal(false);
+      const error = signal(null);
+      ```
+      
+      ```js
+      // ❌ This is NOT what signals are for (multiple independent values)
+      const multipleValues = signal(['John', 30, false]); // Hard to manage
+      
+      // ❌ NOT like RxJS streams that emit multiple values over time
+      const stream$ = new Subject(); // Can emit many values
+      stream$.next(1);
+      stream$.next(2);
+      stream$.next(3);
+      ```
+      
+      
+      ```js
+      const user = signal({name: 'John'});
+      
+      // ❌ "Just mutated" - no change detection
+      user().name = 'Jane';  // Angular ignores this
+      
+      // ✅ "Value changed" - triggers change detection  
+      user.set({name: 'Jane'});  // Angular detects this
+      ```
+      
+      - `change triggers change detection. When mutation don't`
+      For primitives: No issue, since you always replace the value.
+      ```js
+      const count = signal(0);
+      const name = signal('John');
+      const active = signal(true);
+      
+      // ✅ Always works - primitives are inherently immutable
+      count.set(5);           // Replacement is the only option
+      name.set('Jane');       // Can't mutate strings anyway
+      active.set(false);      // No way to accidentally mutate
+      ```
+      
+      For Objects/Arrays: The Pitfall Zone
+      ```js
+      const user = signal({name: 'John', age: 30});
+      const items = signal(['apple', 'banana']);
+      
+      // ❌ SILENT BUGS - mutation doesn't trigger reactivity
+      user().name = 'Jane';       // UI won't update!
+      items().push('orange');     // No change detection!
+      
+      // ✅ CORRECT - replacement triggers reactivity
+      user.set({...user(), name: 'Jane'});
+      items.set([...items(), 'orange']);
+      ```
+
+      ```js
+      import { signal, effect } from '@angular/core';
+      
+      // Create a signal holding an object
+      const userSignal = signal({ name: 'Alice', age: 25 });
+      
+      // Reactive effect that logs whenever the signal changes
+      effect(() => {
+        console.log('User changed:', userSignal());
+      });
+      
+      // ---- MUTATION ----
+      // Directly mutating the object inside the signal
+      userSignal().age = 26;  
+      // ❌ This does NOT trigger the effect, no change detection happens
+      
+      // ---- REPLACEMENT ----
+      // Replacing the whole value with a new object creates a new reference, which triggers CD and any effects
+      userSignal({ ...userSignal(), age: 26 });  
+      // ✅ This triggers the effect and Angular reacts
+      ```
+      
+      - `designated Signal API methods`
+      ```js
+      // Creation with options
+      const user = signal({name: 'John'}, {
+        equal: (a, b) => a.name === b.name,  // Custom equality
+      });
+      
+      // Read value
+      const user = user();
+      const name = user().name;
+      
+      // Write value
+      user.set({name: 'Jane'});
+      user.update(u => ({...u, age: 30}));
+      
+      // Readonly view
+      const readOnlyUser = user.asReadonly();
+      
+      // Derived signal
+      const greeting = computed(() => `Hello ${user().name}`);
+      ```
+</details>
+
+<details>
+    <summary> Examples </summary>
+    
         🟦 signal() - Create a Signal
         import { signal } from '@angular/core';
         
