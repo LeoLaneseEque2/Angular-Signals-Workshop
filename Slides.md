@@ -3,18 +3,18 @@
 > I’ll admit it. When I first got my hands on Angular Signals, I thought, "Cool, reactive variables just like RxJS but easier." ... I couldn't have underestimated them more. The truth is, they're not just a simpler alternative; they're an entirely new paradigm for Angular Change-Detection.
 
 🟦 [1. Why This Matters?](#1-why-this-matters) <br>
--- 🟨 [Real World Example: E-commerce table product](#real-world-example-e-commerce-table-product) <br>
+-- 🟨 Real World Example: E-commerce table product<br>
 
 🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift) <br>
--- 🟨 [Angular patterns as the days go by](#angular-patterns-as-the-days-go-by) <br>
--- 🟨  What Signals actually are and what they are not <br>
--- 🟨 [A fancy Analogy: Observables & Signals](#a-fancy-analogy-observables--signals) <br>
+-- 🟨 Angular patterns as the days go by <br>
+-- 🟨 What Signals actually are and what they are not <br>
+-- 🟨 A fancy Analogy: Observables & Signals <br>
 
 🟦 [3. Understanding Signals](#3-understanding-signals) <br>
 -- 🟨 [Definition](#definition)<br>
 -- 🟨 [How to update and read signal value](#how-to-update-and-read-sign-value)<br>
 
-🟦 5. A real world example <br>
+🟦 [5. A real world example](#3-a-real-world-example) <br>
 
 <br><br>
 -------------------------------------------------------------------------------------------------
@@ -368,7 +368,7 @@ Use the right tool: <br>
 -------------------------------------------------------------------------------------------------
 <br><br>
 
-## 🟩 3. Understanding Signals
+## 3. Understanding Signals
 
 ### 🤔 What Are Angular Signals?
 > 🚨 Signals are `reactive primitives` that hold a `single value`. `Any Change through Signal API methods, trigger Change-Detection`, but `direct mutation of Object/Array values without these methods WON'T trigger updates`.
