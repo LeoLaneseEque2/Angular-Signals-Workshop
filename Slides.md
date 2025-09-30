@@ -14,13 +14,13 @@
 -- 🟨 What Signals actually are and what they are not <br>
 
 🟦 [4. Best Practices & Quick Notes](#4-Best-Practices-and-Quick-Notes) <br>
-🔸Use signals for local, synchronous state in components.
-🔸Use observables for async streams (HTTP, websockets, timers).
-🔸Combine both: toObservable() / toSignal() to consume observables / signals easily in templates
-🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values.
-🔸Angular favour signal() / computed() / effect() for component-local or simple service state, reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc).
-🔸Signals don't replace Observables.
-🔸Incremental Change-Detection & Signal Batch Updates 
+🔸Use signals for local, synchronous state in components. <br>
+🔸Use observables for async streams (HTTP, websockets, timers). <br>
+🔸Combine both: toObservable() / toSignal() to consume observables / signals easily in templates. <br>
+🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values. <br>
+🔸Angular favour signal() / computed() / effect() for component-local or simple service state, reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc). <br>
+🔸Signals don't replace Observables. <br>
+🔸Incremental Change-Detection & Signal Batch Updates. <br>
 
 🟦 Thanks!
 
