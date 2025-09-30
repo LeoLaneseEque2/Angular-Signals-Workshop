@@ -1,11 +1,12 @@
 🟩 Workshop Evolving Angular: 🔴 Imperative → 🟡 Reactive → 🟢 Signals. The New Angular Mindset
 
-> State isn't just data. It's behaviour waiting to happen!
+> I’ll admit it. When I first got my hands on Angular Signals, I thought, "Cool, reactive variables just like RxJS but easier." ... I couldn't have underestimated them more. The truth is, they're not just a simpler alternative; they're an entirely new paradigm for Angular Change-Detection.
 
 🟦 [1. Why This Matters?](#1-why-this-matters) <br>
 -- 🟨 [Real World Example: E-commerce table product](#real-world-example-e-commerce-table-product) <br>
 🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift) <br>
 -- 🟨 [Angular patterns as the days go by](#angular-patterns-as-the-days-go-by) <br>
+-- 🟨  What Signals actually are and what they are not <br>
 -- 🟨 [A fancy Analogy: Observables & Signals](#a-fancy-analogy-observables--signals) <br>
 
 🟦 [3. Understanding Signals](#3-understanding-signals) <br>
@@ -27,18 +28,22 @@
 
 🔸 Feature `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
 
-🔸 Signals are no longer "just another feature", they're the `core of Angular reactivity going forward` with. <br>
+🔸 `Signals are not just another feature", they're the core of Angular reactivity going forward` with. <br>
 
-🔸Signals break the blanket dependency on event loop + ZoneJS:  No more "Blanket dependency", means Angular was completely dependent on the event loop + Zone.js for every single change detection cycle. Signals step in by  **breaking the blanket dependency** on the `event loop + ZoneJS`. Instead of waiting for any microtask to finish, a Signal knows exactly which pieces of state are "watched" by which consumers.
-
-🔸 Signals break the **blanket dependency** on event loop + ZoneJS: **What was "blanket dependency"?** Angular was completely dependent on the event loop + ZoneJS for every single Change-Detection cycle. Signals step in by breaking this dependency. Instead of waiting for any Microtask to finish, a signal knows exactly which pieces of state are "watched" by which consumers. <br>
+🔸 `Signals break the **blanket dependency** on event loop + ZoneJS`: **What was "blanket dependency"?** Angular was completely dependent on the event loop + ZoneJS for every single Change-Detection cycle. Signals step in by breaking this dependency. Instead of waiting for any Microtask to finish, a signal knows exactly which pieces of state are "watched" by which consumers. <br>
 In othe words: <br>
 (Traditional Angular) Any Change → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
 (Modern Angular): Signal Change → 🎯 Direct Update → Only Affected Components = Signals eliminate the need for **blanket Change-Ddetection** by "knowing exactly what Components to update" <br>
 
 
-## 💥 So ... Why This Matters again?
-🟨 Real word Example: E-commerce Product TABLE
+## 🟨 So ... Why This Matters again?
+SIMPLICITY
+[![https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?file=src%2Fapp-signal-demo.component.ts](SIMPLICITY)](https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-signal-demo.component.ts)
+
+Notice what happened? No subscription. No cleanup. No .pipe(). Signals keep things refreshingly boring.
+
+## 🟨 So ...  Why ... Why  This Matters again?
+🔸 Real word Example: E-commerce Product TABLE
 <details>
     <summary>🔴 Before Signals (ZoneJS): </summary>
  
@@ -46,7 +51,7 @@ In othe words: <br>
       @Component({
         template: `
           <div class="dashboard">
-            <!-- 50+ components that update frequently -->
+            <!-- 50+ components that update frequently = small size app -->
             <product-list [products]="products"></product-list>      <!-- 25 items -->
             <shopping-cart [items]="cartItems"></shopping-cart>      <!-- Updates on add/remove -->
             <user-activity [logs]="activityLogs"></user-activity>    <!-- Real-time updates -->
@@ -111,7 +116,7 @@ In othe words: <br>
 
 </details>
 
-## 💥 So ... Why ... Why This Matters again? <br>
+## 🟨 So ... Why ... Why  Why ... Why This Matters again? <br>
 🔸 Angular Signals Change the Way We Build Angular Apps: <br> 
 Gentle learning curve + Less boilerplate code + less bugs + faster Apps + better UX = Happier Devs! <br>
 
@@ -278,15 +283,9 @@ Zones → RxJS
 ```
 
 
-💡 Keynotes: <br>
-🔴 → 🟡: Gained reactivity but added complexity <br>
-🟡 → 🟢: Kept reactivity but reduced complexity <br>
+## 🟨 What Signals actually are and what they are not
 
-
-
-## 🟨 A fancy Analogy: Observables & Signals
-
-🤔 Observables
+🔸 Observables
 > Are a `lazy`, `push`, `collection` of `multple values`
 
 - `lazy` Need to subscribe to it
@@ -294,8 +293,10 @@ Zones → RxJS
 - `collection` because are collections of data, similar to Arrays
 - `multiple values` because Observables can produce 0,1, or many values over time. Instantly, slowly or never
 
-🤔 Signals
+Simply put:<br>
+Are streams of values over time. You subscribe to them. They keep flowing until you unsubscribe.
 
+🔸 Signals
 > Are an `eager`, `reactive`, `single-value` primitive containing `mutable value`
 
 - `eager` Always holds a value, no need to subscribe
@@ -303,11 +304,15 @@ Zones → RxJS
 - `single-value` Holds exactly one value at a time
 - `mutable value` The value inside the signal can be changed
 
+Simply put: <br> 
+Are not streams. They're containers of a single value at a single moment in time.
 
-💡 Keynotes: <br>
-Real Analogy <br>
+---
+
+## 🟨 A fancy Analogy: Observables & Signals
+
 → Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
-→ Instead, Signals are more like a glass of water, always present, always filled, and holds, the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
+→ Signal instead, are more like a glass of water, always present, always filled, and holds the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
 
 
 <br><br>
