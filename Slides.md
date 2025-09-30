@@ -14,7 +14,7 @@
 -- 🟨 [Definition](#definition)<br>
 -- 🟨 [How to update and read signal value](#how-to-update-and-read-sign-value)<br>
 
-🟦 [5. A real world example](#3-a-real-world-example) <br>
+🟦 [4. Best Practices & Quick Notes](#4-Best-Practices-& -Quick-Notes) <br>
 
 <br><br>
 -------------------------------------------------------------------------------------------------
@@ -568,7 +568,7 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 -------------------------------------------------------------------------------------------------
 <br><br>
 
-# 🟩 Best Practices & Quick Notes
+## 4. Best Practices & Quick Notes
    
  <details>
     <summary>🔸Use signals for local, synchronous state in components.</summary>
