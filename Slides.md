@@ -672,9 +672,9 @@ this.emailSignal.set("john@example.com"); // Check only components using emailSi
 
 ```js
 // Without batching
-this.nameSignal.set("John");     // → Update components using nameSignal
-this.ageSignal.set(25);          // → Update components using ageSignal
-this.emailSignal.set("john@example.com"); // → Update components using emailSignal
+this.nameSignal.set("John");     // Update components using nameSignal
+this.ageSignal.set(25);          // Update components using ageSignal
+this.emailSignal.set("john@example.com"); // Update components using emailSignal
 
 // With batching
 batch(() => {
