@@ -228,39 +228,51 @@ it was imperative plumbing around a reactive library.
 
     ```js
        // Focus: RxJS mastery, async pipes, declarative templates, reactive thinking
-     @Component({
-       template: `
-         <!-- async pipe does the subscribing/unsubscribing automatically in the template -->
-         <ng-container *ngIf="user$ | async as userState">
-           <div *ngIf="userState.loading">Loading...</div>
-           <div *ngIf="userState.error" class="error">{{ userState.error }}</div>
-           <div *ngIf="userState.data">
-             <h2>{{ userState.data.name }}</h2>
-             <p>{{ userState.data.email }}</p>
-           </div>
-         </ng-container>
-         <button (click)="reload$.next()">Reload</button>
-       `
-     })
-     export class UserProfileComponent {
-       private reload$ = new BehaviorSubject<void>(undefined);
-       
-       user$ = this.reload$.pipe(
-         switchMap(() => {
-           return this.userService.getUser(123).pipe(
-             map(data => ({ data, loading: false, error: '' })),
-             catchError(error => of({ 
-               data: null, 
-               loading: false, 
-               error: 'Failed to load user' 
-             })),
-             startWith({ data: null, loading: true, error: '' })
-           );
-         })
-       );
-     
-       constructor(private userService: UserService) {}
-     }
+        @Component({
+          selector: 'app-user-profile',
+          standalone: true,
+          template: `
+            @if (loading()) {
+              <div>Loading...</div>
+            } @else if (error()) {
+              <div class="error">{{ error() }}</div>
+            } @else if (user(); as userData) {
+              <h2>{{ userData.name }}</h2>
+              <p>{{ userData.email }}</p>
+            }
+            
+            <button (click)="loadUser()">Reload</button>
+          `,
+          changeDetection: ChangeDetectionStrategy.OnPush
+        })
+        export class UserProfileComponent {
+          private userService = inject(UserService);
+          
+          user = signal<any>(null);
+          loading = signal(false);
+          error = signal('');
+        
+          constructor() {
+            this.loadUser();
+          }
+        
+          async loadUser() {
+            batch(() => {
+              this.loading.set(true);
+              this.error.set('');
+            });
+            
+            try {
+              const userData = await firstValueFrom(this.userService.getUser(123));
+              this.user.set(userData);
+            } catch (err) {
+              this.error.set('Failed to load user');
+            } finally {
+              this.loading.set(false);
+            }
+          }
+        }
+
      ```
 </details>
 
