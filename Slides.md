@@ -7,14 +7,22 @@
 
 🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift) <br>
 -- 🟨 Angular patterns as the days go by <br>
--- 🟨 What Signals actually are and what they are not <br>
 -- 🟨 A fancy Analogy: Observables & Signals <br>
 
 🟦 [3. Understanding Signals](#3-understanding-signals) <br>
--- 🟨 [Definition](#definition)<br>
--- 🟨 [How to update and read signal value](#how-to-update-and-read-sign-value)<br>
+-- 🟨 Signal Definition <br>
+-- 🟨 What Signals actually are and what they are not <br>
 
 🟦 [4. Best Practices & Quick Notes](#4-Best-Practices-and-Quick-Notes) <br>
+🔸Use signals for local, synchronous state in components.
+🔸Use observables for async streams (HTTP, websockets, timers).
+🔸Combine both: toObservable() / toSignal() to consume observables / signals easily in templates
+🔸Instead of: many @Input() + ngOnChanges() patterns, better do: signals + computed values.
+🔸Angular favour signal() / computed() / effect() for component-local or simple service state, reserve BehaviorSubject / Observables for event streams (HTTP, websockets, router events, etc).
+🔸Signals don't replace Observables.
+🔸Incremental Change-Detection & Signal Batch Updates 
+
+🟦 Thanks!
 
 <br><br>
 -------------------------------------------------------------------------------------------------
@@ -326,36 +334,6 @@ Zones → RxJS
                           + fine-grained reactivity + ZoneLess
 ```
 
-
-## 🟨 What Signals actually are and what they are not
-
-🔸 Observables
-> Are a `lazy`, `push`, `collection` of `multple values`
-
-- `lazy` Need to subscribe to it
-- `push` Observables$ push values to consumer
-- `collection` because are collections of data, similar to Arrays
-- `multiple values` because Observables can produce 0,1, or many values over time. Instantly, slowly or never
-
-Simply put:<br>
-Are streams of values over time. You subscribe to them. They keep flowing until you unsubscribe.
-
-🔸 Signals
-> Are an `eager`, `reactive`, `single-value` primitive containing `mutable value`
-
-- `eager` Always holds a value, no need to subscribe
-- `reactive` Changes automatically trigger Angular’s change detection
-- `single-value` Holds exactly one value at a time
-- `mutable value` The value inside the signal can be changed
-
-Simply put: <br> 
-Are not streams. They're containers of a single value at a single moment in time.
-
-
-Use the right tool: <br>
-- Signals shine for stateful values: component state, derived data, form handling.
-- Observables shine for streams: events, async sources, high-frequency data.
-
 ---
 
 ## 🟨 A fancy Analogy: Observables & Signals
@@ -561,8 +539,38 @@ Always use set(), update(), or mutate(), never modify signal values directly!
         toSignal() - Convert Observable to Signal
         toObservable() - Convert Signal to Observable
         
-
 </details>
+
+## 🟨 What Signals actually are and what they are not
+
+🔸 Observables
+> Are a `lazy`, `push`, `collection` of `multple values`
+
+- `lazy` Need to subscribe to it
+- `push` Observables$ push values to consumer
+- `collection` because are collections of data, similar to Arrays
+- `multiple values` because Observables can produce 0,1, or many values over time. Instantly, slowly or never
+
+Simply put:<br>
+Are streams of values over time. You subscribe to them. They keep flowing until you unsubscribe.
+
+🔸 Signals
+> Are an `eager`, `reactive`, `single-value` primitive containing `mutable value`
+
+- `eager` Always holds a value, no need to subscribe
+- `reactive` Changes automatically trigger Angular’s change detection
+- `single-value` Holds exactly one value at a time
+- `mutable value` The value inside the signal can be changed
+
+Simply put: <br> 
+Are not streams. They're containers of a single value at a single moment in time.
+
+
+Use the right tool: <br>
+- Signals shine for stateful values: component state, derived data, form handling.
+- Observables shine for streams: events, async sources, high-frequency data.
+
+
 
 <br><br>
 -------------------------------------------------------------------------------------------------
@@ -653,50 +661,49 @@ Always use set(), update(), or mutate(), never modify signal values directly!
 <details>
  <summary>🔸Incremental Change-Detection & Signal Batch Updates </summary>
   Batch updates allow multiple signal changes to be grouped together and processed as a single update cycle, rather than triggering separate change detection cycles for each individual change.
+        
+         ```js
+        // Each signal change triggers its own update cycle
+        this.nameSignal.set("John");     // → Change detection for components using nameSignal
+        this.ageSignal.set(25);          // → Change detection for components using ageSignal  
+        this.emailSignal.set("john@example.com"); // → Change detection for components using emailSignal
+        
+        // Result: 3 separate change detection cycles
+        // But each cycle only updates components that use that specific signal
+        ```
+        
+        ### The Key Difference from tradictional Angular Vs Signal 
+        
+        > ZoneJS (Traditional Angular) `Check ALL components in the app` VS Signal `Check only components using nameSignal` = Targeted Updates: Each signal only updates its consumers, No Global Scanning, incremental but surgical efficient
+        
+        ```js
+        this.name = "John";     // Check ALL components in the app
+        this.age = 25;          // Check ALL components in the app again
+        this.email = "john@example.com"; // Check ALL components in the app again
+        // Result: 3 "global" change detection cycles
+        
+        this.nameSignal.set("John");     // Check only components using nameSignal
+        this.ageSignal.set(25);          // Check only components using ageSignal
+        this.emailSignal.set("john@example.com"); // Check only components using emailSignal
+        // Result: 3 "targeted" change detection cycles
+        ```
 
- ```js
-// Each signal change triggers its own update cycle
-this.nameSignal.set("John");     // → Change detection for components using nameSignal
-this.ageSignal.set(25);          // → Change detection for components using ageSignal  
-this.emailSignal.set("john@example.com"); // → Change detection for components using emailSignal
-
-// Result: 3 separate change detection cycles
-// But each cycle only updates components that use that specific signal
-```
-
-### The Key Difference from tradictional Angular Vs Signal 
-
-> ZoneJS (Traditional Angular) `Check ALL components in the app` VS Signal `Check only components using nameSignal` = Targeted Updates: Each signal only updates its consumers, No Global Scanning, incremental but surgical efficient
-
-```js
-this.name = "John";     // Check ALL components in the app
-this.age = 25;          // Check ALL components in the app again
-this.email = "john@example.com"; // Check ALL components in the app again
-// Result: 3 "global" change detection cycles
-
-this.nameSignal.set("John");     // Check only components using nameSignal
-this.ageSignal.set(25);          // Check only components using ageSignal
-this.emailSignal.set("john@example.com"); // Check only components using emailSignal
-// Result: 3 "targeted" change detection cycles
-```
-
-### Batch Updates Help:
-
-```js
-// Without batching
-this.nameSignal.set("John");     // Update components using nameSignal
-this.ageSignal.set(25);          // Update components using ageSignal
-this.emailSignal.set("john@example.com"); // Update components using emailSignal
-
-// With batching
-batch(() => {
-  this.nameSignal.set("John");
-  this.ageSignal.set(25);
-  this.emailSignal.set("john@example.com");
-});
-// Result: 1 "targeted" change detection cycles
-```
-
+        ### Batch Updates Help:
+        
+        ```js
+        // Without batching
+        this.nameSignal.set("John");     // Update components using nameSignal
+        this.ageSignal.set(25);          // Update components using ageSignal
+        this.emailSignal.set("john@example.com"); // Update components using emailSignal
+        
+        // With batching
+        batch(() => {
+          this.nameSignal.set("John");
+          this.ageSignal.set(25);
+          this.emailSignal.set("john@example.com");
+        });
+        // Result: 1 "targeted" change detection cycles
+        ```
 </details>
 
 --------------------------------------------------------------------------------------------------------------------
