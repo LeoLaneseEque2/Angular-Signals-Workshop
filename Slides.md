@@ -200,6 +200,13 @@ This is why Signals don't just improve performance, they transform Angular scala
 → 2) 🟡 Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display")  <br>
 → 3) 🟢 Angular 16+ days: Modern declarative hybrid + Signals and reactive state  <br>
 
+```ts
+State Management
+   → Angular 2-12: Manual + RxJS, 
+      → Angular 12-16: Async pipes 
+         → Angular 16+: Signals
+```
+
 <br>
 
 <details>
@@ -238,7 +245,8 @@ This is why Signals don't just improve performance, they transform Angular scala
           loadUser() {
             this.loading = true;
             this.error = '';
-            this.userSub?.unsubscribe(); // Clean up previous subscription
+            this.user = null;
+            this.userSub?.unsubscribe();
         
             this.userSub = this.userService.getUser(123).subscribe({
               next: (user) => {
@@ -265,21 +273,6 @@ This is why Signals don't just improve performance, they transform Angular scala
 
     ```js
         // Focus: RxJS mastery, async pipes, declarative templates, reactive thinking
-        @Component({
-          selector: 'app-user-profile',
-          standalone: true,
-          template: `
-            <div *ngIf="loading$ | async">Loading...</div>
-            <div *ngIf="error$ | async as error" class="error">{{ error }}</div>
-            <div *ngIf="user$ | async as user">
-              <h2>{{ user.name }}</h2>
-              <p>{{ user.email }}</p>
-            </div>
-            <button (click)="loadUser()">Reload</button>
-          `,
-          changeDetection: ChangeDetectionStrategy.OnPush
-        })
-        export class UserProfileComponent implements OnInit, OnDestroy {
           user$: Observable<User | null>;
           loading$: Observable<boolean>;
           error$: Observable<string>;
@@ -289,16 +282,41 @@ This is why Signals don't just improve performance, they transform Angular scala
         
           constructor(private userService: UserService) {}
         
-          ngOnInit() {       
-            this.user$ = this.userService.getUser(123).pipe(
-              catchError((err) => {
-                console.error('Failed to load user', err);
-                return of(null);
-              }),
+          ngOnInit() {
+            this.user$ = this.reload$.pipe(
+              startWith(null),
+              switchMap(() =>
+                this.userService.getUser(123).pipe(
+                  map((user) => user),
+                  catchError((err) => {
+                    console.error('Failed to load user', err);
+                    return of(null);
+                  }),
+                  takeUntil(this.destroy$)
+                )
+              ),
               shareReplay(1)
             );
-          );
-
+        
+            this.loading$ = this.reload$.pipe(
+              map(() => true),
+              startWith(false),
+              switchMap(() =>
+                this.userService.getUser(123).pipe(
+                  map(() => false),
+                  catchError(() => of(false)),
+                  finalize(() => {}),
+                  takeUntil(this.destroy$)
+                )
+              ),
+              startWith(false)
+            );
+        
+            this.error$ = this.user$.pipe(
+              map((user) => (user ? '' : 'Failed to load user')),
+              takeUntil(this.destroy$)
+            );
+          }
         
           loadUser() {
             this.reload$.next();
@@ -327,8 +345,7 @@ This is why Signals don't just improve performance, they transform Angular scala
            <p>{{ userData.email }}</p>
          </div>
          <button (click)="loadUser()">Reload</button>
-      `,
-       changeDetection: ChangeDetectionStrategy.OnPush
+      `
     })
     export class UserProfileComponent {
       private userService = inject(UserService);
@@ -347,7 +364,7 @@ This is why Signals don't just improve performance, they transform Angular scala
         this.error.set('');
           
         this.userService.getUser(123)
-          .pipe(takeUntilDestroyed(this.destroyRef))  // ✅ Auto-cleanup
+          .pipe(takeUntilDestroyed(this.destroyRef))  // ✅ Auto-cleanup, not really need it but 
           .subscribe({
             next: (user) => {
               this.user.set(user);
@@ -743,6 +760,74 @@ Use the right tool: <br>
         // Result: 1 "targeted" change detection cycles
         ```
 </details>
+
+<details>
+ <summary>🔸The Pattern: Minimal Writable Signals + Maximal Computed Signals</summary>
+
+        Minimal Writable Signals (Source of Truth)
+
+        // Only these can be changed directly
+        const quantity = signal(2);
+        const price = signal(25);
+        const items = signal<CartItem[]>([]);
+        
+        // That's it! Everything else derives from these
+
+
+        Maximal Computed Signals (Derived State)
+
+        // Everything else is computed - no direct setting allowed!
+        const subtotal = computed(() => 
+          items().reduce((sum, item) => sum + item.price * quantity(), 0)
+        );
+        
+        const tax = computed(() => subtotal() * 0.08);
+        const total = computed(() => subtotal() + tax());
+        const itemCount = computed(() => items().length);
+        const hasItems = computed(() => itemCount() > 0);
+        const isEligibleForDiscount = computed(() => total() > 100);
+
+    Caching
+        Computed Signal: Built-in memoization
+        Regular Signal: No automatic caching
+
+    Performance Optimization
+        Computed Signal: Optimal for derived data
+        Regular Signal: Optimal for source data
+
+                 ┌─────────────────┐
+                 │  WRITABLE       │ ← Only these can be modified
+                 │  (Source)       │
+                 └─────────────────┘
+                       ↓  ↓  ↓
+                ┌─────────────────────────────────────┐
+                │            COMPUTED                 │ ← Everything else derives
+                │    (Pure, Automatic, Safe)          │
+                └─────────────────────────────────────┘
+
+
+</details>
+
+<details>
+     <summary>🔸The Pattern: The Reactive Cascade  </summary>
+                
+            // ❌ instead of
+            class WastefulService {
+              private state = signal(largeDataSet);     // 1x memory usage
+              readonly copyA = signal(largeDataSet);    // 1x additional memory
+              readonly copyB = signal(largeDataSet);    // 1x additional memory
+              readonly copyC = signal(largeDataSet);    // 1x additional memory
+            }
+
+            // better do
+           class OptimalService {
+              private state = signal(largeDataSet);           // 1x memory usage
+              readonly derivedA = computed(() => /* ... */);  // 0x additional memory
+              readonly derivedB = computed(() => /* ... */);  // 0x additional memory
+              readonly derivedC = computed(() => /* ... */);  // 0x additional memory
+            }
+
+ </details>
 
 --------------------------------------------------------------------------------------------------------------------
 
