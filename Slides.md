@@ -28,21 +28,23 @@
 -------------------------------------------------------------------------------------------------
 <br><br>
 
-
 ## 1. Why This Matters?
 
-🔸 Angular is again a cool framework to use :)
+🔸No more `Blanket Change-Detection Dependency`
+Before traditional Angular relied completely on ZoneJS, creating a "blanket dependency" on the event loop. Any asynchronous operation, relevant to our Component or not, was monkey-patch and could trigger a full application Change-Detection cycle, creating performance bottlenecks and accidental "Change Detection storms" as applications scaled.
+Now with Signals, Angular break this dependency by introducing `fine-grained reactivity` and `eliminate the blanket aprroach`: Components only update when their specific dependencies change.
 
-🔸 Feature `ZoneLess`: Signal can work with or without ZoneJS magic <br>
+🔸No more `traverse the entire component tree` checking everything
+Before Angular had to traverse the entire component tree (using Depth-First Search algorithms) to find what changed, checking every component whether it needed updates or not.
+Now with signals, Angular knows exactly which components are affected by each Signal, enabling direct, targeted updates without searching: `Eliminating unnecessary tree traversals`
 
-🔸 Feature `Granular Change-Detection`: Angular now knows what exacly changed. No accidental Change Detection storms: In the old model, if something mutates anywhere up the tree, Angular CD detection runs all over the place trying to see what changed. That's fine for small apps but can be heavy if scales. Signals decouple that, making a component to react ONLY to the signals that actually reads, so Angular knows exactly what needs to update and when. Making fine-grained reactivity updates. <br>
+🔸No more `waiting for Microtasks`:
+Before ZoneJS patched async APIs and change detection ran after microtasks completed, tying detection to the event loop's timing.
+Now with Signal, Angular `updates are synchronous and direct without waiting for the event loop`
 
-🔸 `Signals are not just another feature", they're the core of Angular reactivity going forward` with. <br>
-
-🔸 `Signals break the **blanket dependency** on event loop + ZoneJS`: **What was "blanket dependency"?** Angular was completely dependent on the event loop + ZoneJS for every single Change-Detection cycle. Signals step in by breaking this dependency. Instead of waiting for any Microtask to finish, a signal knows exactly which pieces of state are "watched" by which consumers. <br>
 In othe words: <br>
-(Traditional Angular) Any Change → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
-(Modern Angular): Signal Change → 🎯 Direct Update → Only Affected Components = Signals eliminate the need for **blanket Change-Detection** by "knowing exactly what Components to update" <br>
+(Traditional Angular) Any Async Event → 🛡️ ZoneJS Blanket → 💥 Check Entire App
+(Modern Angular)     Signal Change → 🎯 Direct Update → Only Affected Components
 
 <br><br>
 
