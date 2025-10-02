@@ -43,8 +43,8 @@ Before ZoneJS patched async APIs and change detection ran after microtasks compl
 Now with Signal, Angular `updates are synchronous and direct without waiting for the event loop`
 
 In othe words: <br>
-(Traditional Angular) Any Async Event → 🛡️ ZoneJS Blanket → 💥 Check Entire App
-(Modern Angular)     Signal Change → 🎯 Direct Update → Only Affected Components
+(Traditional Angular) Any Async Event → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
+(Modern Angular)     Signal Change → 🎯 Direct Update → Only Affected Components <br>
 
 <br><br>
 
