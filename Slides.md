@@ -28,7 +28,7 @@
 -------------------------------------------------------------------------------------------------
 <br><br>
 
-## 1. Why This Matters?
+## 1. Why This Matters? What is resolving?
 
 🔸No more `Blanket Change-Detection Dependency`
 Before traditional Angular relied completely on ZoneJS, creating a "blanket dependency" on the event loop. Any asynchronous operation, relevant to our Component or not, was monkey-patch and could trigger a full application Change-Detection cycle, creating performance bottlenecks and accidental "Change Detection storms" as applications scaled.
@@ -98,15 +98,21 @@ https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-
 
 <details>
     <summary> Performance.  </summary>
-🔸 ZoneJS checks EVERY component in the component tree, regardless of the actual App number of Components. The problem scales as your Angular app grows: ZoneJS inefficiency grows linearly, while Signals remain constant.
+    
+    🔸 ZoneJS checks EVERY component in the component tree, regardless of the actual App number of Components. The problem scales as your Angular app grows: ZoneJS inefficiency grows linearly, while Signals remain constant.
 
-    | App Size | Zone.js Checks | Signals Checks | Waste Factor |
-    |----------|----------------|----------------|--------------|
-    | **Tiny App** | 5 components    | 1 component | 5x waste |
-    | **Medium App** | 50 components | 1 component | 50x waste |
-    | **Large App** | 500 components | 1 component | 500x waste |
-
-    Change Detection Cost (Relative)
+      - The Mathematical Reality:
+        ZoneJS Complexity: O(n) - Cost increases linearly with component count
+             10 components → Check 10 templates
+             1,000 components → Check 1,000 templates
+             10,000 components → Check 10,000 templates
+        
+        Signals Complexity: O(1) - Constant time regardless of app size
+             10 components → Update only 1-2 that actually changed
+             1,000 components → Update only 1-2 that actually changed
+             10,000 components → Update only 1-2 that actually changed
+    
+    - Change Detection Cost (Relative)
     ┌────────────────────────────────────────────────┐
     │ ZoneJS  ██████████████████████████ 100%        │
     │ Signals ██████ 6%                              │
@@ -178,7 +184,10 @@ https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-
 <br><br>
 
 ## 🟨 So ... Why ... Why  Why ... Why This Matters again? <br>
-Gentle learning curve + Less boilerplate code + less bugs + faster Apps + better UX = Happier Devs! <br>
+
+As our app grows from small → medium → large → enterprise, ZoneJS becomes increasingly inefficient, while Signals maintain optimal performance.
+This is why Signals don't just improve performance, they transform Angular scalability story for large applications!
+
 
 <br><br>
 -------------------------------------------------------------------------------------------------
@@ -196,55 +205,56 @@ Gentle learning curve + Less boilerplate code + less bugs + faster Apps + better
 <details>
     <summary> 🔸 1) 🔴 Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS magic, Change-Detection storms, manual cleanup  </summary>
 
- We're already working with Observables and streams, but the way most Devs used it wasn't really reactive in the "declarative" sense,
-it was imperative plumbing around a reactive library.
+     - We're already working with Observables and streams, but the way most Devs used it wasn't really reactive in the "declarative" sense, more imperative floating around a reactive library.
 
      ```js
-     // FOCUS:   Zone.js magic, change detection storms, manual cleanup, the "why" behind the evolution
+     // FOCUS: ZoneJS magic, change detection storms, manual cleanup...
      // Imperative use of a reactive library
-     // RxJS used imperatively, we manage subscription lifecycle yourself
+     // Manage subscription lifecycle manually and optionally, the far west!
      @Component({
        template: `
-         <div *ngIf="loading">Loading...</div>
-         <div *ngIf="error" class="error">{{ error }}</div>
-         <div *ngIf="user">
-           <h2>{{ user.name }}</h2>
-           <p>{{ user.email }}</p>
-         </div>
-         <button (click)="loadUser()">Reload</button>
+            <div *ngIf="loading">Loading...</div>
+            <div *ngIf="error" class="error">{{ error }}</div>
+            <div *ngIf="user">
+              <h2>{{ user.name }}</h2>
+              <p>{{ user.email }}</p>
+            </div>
+            <button (click)="loadUser()">Reload</button>
        `
      })
     export class UserProfileComponent implements OnInit, OnDestroy {
-      user: any = null;
-      loading = false;
-      error: string = '';
-      private subscription?: Subscription;
-    
-      ngOnInit() {
-        this.loadUser();
-      }
-    
-      loadUser() {
-        this.loading = true;
-        this.error = '';
+          user: User | null = null;
+          loading = false;
+          error = '';
         
-        this.subscription = this.userService.getUser(123).subscribe({   // Manual management
-          next: (user) => {
-            this.user = user;
-            this.loading = false;
-          },
-          error: (err) => {
-            this.error = 'Failed to load user';
-            this.loading = false;
+          private userSub?: Subscription;
+        
+          constructor(private userService: UserService) {}
+        
+          ngOnInit() {
+            this.loadUser();
           }
-        });
-      }
-    
-      ngOnDestroy() {
-        if (this.subscription) {
-          this.subscription.unsubscribe(); // Don't forget!
-        }
-      }
+        
+          loadUser() {
+            this.loading = true;
+            this.error = '';
+            this.userSub?.unsubscribe(); // Clean up previous subscription
+        
+            this.userSub = this.userService.getUser(123).subscribe({
+              next: (user) => {
+                this.user = user;
+                this.loading = false;
+              },
+              error: (err) => {
+                this.error = 'Failed to load user';
+                this.loading = false;
+              }
+            });
+          }
+
+          ngOnDestroy() {
+              this.subscription.unsubscribe(); // oh yeah: Don't forget!
+          }
     }
     ```
 </details>
@@ -254,93 +264,102 @@ it was imperative plumbing around a reactive library.
     <summary> 🔸 2) 🟡 Angular 12–16 days: Reactive & declarative with RxJS + async pipes (streams mostly "pull data -> display")  </summary>
 
     ```js
-       // Focus: RxJS mastery, async pipes, declarative templates, reactive thinking
+        // Focus: RxJS mastery, async pipes, declarative templates, reactive thinking
         @Component({
           selector: 'app-user-profile',
           standalone: true,
           template: `
-            @if (loading()) {
-              <div>Loading...</div>
-            } @else if (error()) {
-              <div class="error">{{ error() }}</div>
-            } @else if (user(); as userData) {
-              <h2>{{ userData.name }}</h2>
-              <p>{{ userData.email }}</p>
-            }
-            
+            <div *ngIf="loading$ | async">Loading...</div>
+            <div *ngIf="error$ | async as error" class="error">{{ error }}</div>
+            <div *ngIf="user$ | async as user">
+              <h2>{{ user.name }}</h2>
+              <p>{{ user.email }}</p>
+            </div>
             <button (click)="loadUser()">Reload</button>
           `,
           changeDetection: ChangeDetectionStrategy.OnPush
         })
-        export class UserProfileComponent {
-          private userService = inject(UserService);
-          
-          user = signal<any>(null);
-          loading = signal(false);
-          error = signal('');
+        export class UserProfileComponent implements OnInit, OnDestroy {
+          user$: Observable<User | null>;
+          loading$: Observable<boolean>;
+          error$: Observable<string>;
         
-          constructor() {
-            this.loadUser();
+          private reload$ = new Subject<void>();
+          private destroy$ = new Subject<void>();
+        
+          constructor(private userService: UserService) {}
+        
+          ngOnInit() {       
+            this.user$ = this.userService.getUser(123).pipe(
+              catchError((err) => {
+                console.error('Failed to load user', err);
+                return of(null);
+              }),
+              shareReplay(1)
+            );
+          );
+
+        
+          loadUser() {
+            this.reload$.next();
           }
         
-          async loadUser() {
-            batch(() => {
-              this.loading.set(true);
-              this.error.set('');
-            });
-            
-            try {
-              const userData = await firstValueFrom(this.userService.getUser(123));
-              this.user.set(userData);
-            } catch (err) {
-              this.error.set('Failed to load user');
-            } finally {
-              this.loading.set(false);
-            }
+          ngOnDestroy() {
+            this.destroy$.next();
+            this.destroy$.complete();
+            this.reload$.complete();
           }
         }
-
      ```
 </details>
 
 <details>
-    <summary> 🔸 3) 🟢 Typical pattern Angular 16+ days: Modern Hybrid + Signals: Signals wrap observables, template reacts automatically to data. Template just reacts to data  </summary>
+    <summary> 🔸 3) 🟢 Typical pattern Angular 16+ days: Modern Hybrid + Signals: Signals wrap observables, template reacts automatically to data. </summary>
 
     ```js
     //  Modern Approach: Simple, fine-grained updates, no subscriptions, excellent performance
     @Component({
       template: `
-        <div *ngIf="loading()">Loading...</div>
-        <div *ngIf="error()" class="error">{{ error() }}</div>
-        <div *ngIf="user()">
-          <h2>{{ user()!.name }}</h2>
-          <p>{{ user()!.email }}</p>
-        </div>
-        <button (click)="loadUser()">Reload</button>
-      `
+         <div @if="loading()">Loading...</div>  
+           <div @if="error()" class="error">{{ error() }}</div>  
+           <div @if="user(); as userData">      
+           <h2>{{ userData.name }}</h2>   <!-- No function calls -->
+           <p>{{ userData.email }}</p>
+         </div>
+         <button (click)="loadUser()">Reload</button>
+      `,
+       changeDetection: ChangeDetectionStrategy.OnPush
     })
     export class UserProfileComponent {
+      private userService = inject(UserService);
+      private destroyRef = inject(DestroyRef);
+    
       user = signal<any>(null);
       loading = signal(false);
       error = signal('');
     
-      constructor(private userService: UserService) {
+      constructor() {
         this.loadUser();
       }
     
-      async loadUser() {
+      loadUser() {
         this.loading.set(true);
         this.error.set('');
-        
-        try {
-          const userData = await firstValueFrom(this.userService.getUser(123));
-          this.user.set(userData);
-        } catch (err) {
-          this.error.set('Failed to load user');
-        } finally {
-          this.loading.set(false);
+          
+        this.userService.getUser(123)
+          .pipe(takeUntilDestroyed(this.destroyRef))  // ✅ Auto-cleanup
+          .subscribe({
+            next: (user) => {
+              this.user.set(user);
+              this.loading.set(false);
+            },
+            error: (err) => {
+              this.error.set('Failed to load user');
+              this.loading.set(false);
+            }
+          });
         }
-      }
+      
     }
     ```
 </details>
