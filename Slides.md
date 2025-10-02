@@ -52,12 +52,12 @@ In othe words: <br>
 Simplicity. <br>
 https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-signal-demo.component.ts
 
+
 <details>
     <summary>🟢Notice what happened here?</summary>
 
-             Nothing .... No subscription management. No cleanup required. No .pipe() operatotrs. No magic ... This just work
+             Nothing .... No subscription management. No cleanup required. No pipe() operators ... No magic! just works!
         
-
             🎯 No subscription maangement
             private subscription?: Subscription;
             
@@ -95,16 +95,33 @@ https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-
 <br><br>
 
 ## 🟨 So ...  Why ... Why  This Matters again?
-Performance. <br>
-🔸 Regardless of the actual App number of Components, ZoneJS checks EVERY component in the component tree. The problem scales as your Angular app grows, ZoneJS inefficiency grows linearly, while Signals remain constant.
+
+<details>
+    <summary> Performance.  </summary>
+🔸 ZoneJS checks EVERY component in the component tree, regardless of the actual App number of Components. The problem scales as your Angular app grows: ZoneJS inefficiency grows linearly, while Signals remain constant.
 
     | App Size | Zone.js Checks | Signals Checks | Waste Factor |
     |----------|----------------|----------------|--------------|
     | **Tiny App** | 5 components    | 1 component | 5x waste |
     | **Medium App** | 50 components | 1 component | 50x waste |
     | **Large App** | 500 components | 1 component | 500x waste |
-    
-      
+
+    Change Detection Cost (Relative)
+    ┌────────────────────────────────────────────────┐
+    │ ZoneJS  ██████████████████████████ 100%        │
+    │ Signals ██████ 6%                              │
+    │                                                │
+    │ ZoneJS  █████████████████████████████████ 100% │
+    │ Signals ██████ 6%                              │
+    │                                                │
+    │ ZoneJS  █████████████████████████████████ 100% │
+    │ Signals ██████ 6%                              │
+    │                                                │
+    └────────────────────────────────────────────────┘
+       10 comp    100 comp    1000 comp
+
+</details>
+        
 <details>
     <summary>🔴 Before Signals (ZoneJS): </summary>
  
