@@ -1,6 +1,6 @@
 🟩 Workshop Evolving Angular: 🔴 Imperative → 🟡 Reactive → 🟢 Signals. The New Angular Mindset
 
-> I’ll admit it. When I first got my hands on Angular Signals, I thought, "Cool, reactive variables just like RxJS but easier." ... I couldn't have underestimated them more. The truth is, they're not just a simpler alternative; they're an entirely new paradigm for Angular Change-Detection.
+> I'll admit it. When I first got my hands on Angular Signals, I thought, "Cool, reactive variables just like RxJS but easier." ... I couldn't have underestimated them more. The truth is, they're not just a simpler alternative; they're an entirely new paradigm for Angular Change-Detection.
 
 🟦 [1. Why This Matters?](#1-why-this-matters) <br>
 -- 🟨 Real World Example: E-commerce table product<br>
