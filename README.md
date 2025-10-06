@@ -1,4 +1,4 @@
-# Eq2 Workshop 
+# Eque2 - Angular Workshop 
 
 ```ts
 "State isn't just data, it's behaviour waiting to happen."
@@ -6,6 +6,8 @@
 Workshop:
       Evolving Angular: From Imperative → Reactive → Signals. The New Angular Mindset
 ```
+
+![](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/refs/heads/main/images/angular.webp?token=GHSAT0AAAAAADMSCYKF5REB6DTPZUPQSGPM2HDZF2Q)
 
 
 ```js
