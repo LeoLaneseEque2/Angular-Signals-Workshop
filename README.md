@@ -37,11 +37,11 @@ Workshop:
 │   └───────────────────────────────────────────────────────────────────────┘   │
 │                                                                               │
 └───────────────────────────────────────────────────────────────────────────────┘
-   2016       2018       2020       2022        2023           2024               2025                2026 
-   ┃          ┃          ┃          ┃           ┃              ┃                  ┃                    ┃    
-   Angular 2  Angular 5  Angular 8  Angular 12  Angular 15+    Angular 17+        Angular 19+          Angular 21+
-   (RxJS)     (HttpClient)(Ivy)     (Strict)    (Standalone)   (Stable Signals)   (Deferrable Views)  (ZoneLess default, 
-                                                                                                       Signal-Based forms, httpResource)
+2016       2018         2020       2022        2023           2024               2025                2026 
+┃          ┃            ┃          ┃           ┃              ┃                  ┃                    ┃    
+Angular 2  Angular 5    Angular 8  Angular 12  Angular 15+    Angular 17+        Angular 19+          Angular 21+
+(RxJS)     (HttpClient)  (Ivy)     (Strict)    (Standalone)   (Stable Signals)   (Deferrable Views)  (ZoneLess default, 
+                                                                                                      Signal-Based forms, httpResource)
 ```
 
 ---
