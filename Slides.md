@@ -783,8 +783,10 @@ Use the right tool: <br>
 <details>
  <summary>🔸The Pattern: Minimal Writable Signals + Maximal Computed Signals</summary>
 
-        Minimal Writable Signals (Source of Truth)
+        >  The pattern of minimal writable signals + maximal computed signals creates efficient, maintainable architectures that scale well and provide excellent developer experience.
+        >  Computed signals are your friends for derived state, they’re not just lightweight, they’re often the most performant choice for reactive transformations and calculations.
 
+        1  - Minimal Writable Signals (Source of Truth)
         // Only these can be changed directly
         const quantity = signal(2);
         const price = signal(25);
@@ -793,8 +795,7 @@ Use the right tool: <br>
         // That's it! Everything else derives from these
 
 
-        Maximal Computed Signals (Derived State)
-
+        2 - Maximal Computed Signals (Derived State)
         // Everything else is computed - no direct setting allowed!
         const subtotal = computed(() => 
           items().reduce((sum, item) => sum + item.price * quantity(), 0)
@@ -806,13 +807,13 @@ Use the right tool: <br>
         const hasItems = computed(() => itemCount() > 0);
         const isEligibleForDiscount = computed(() => total() > 100);
 
-    Caching
-        Computed Signal: Built-in memoization
+    -> Caching
         Regular Signal: No automatic caching
+        Computed Signal: Built-in memoization
 
-    Performance Optimization
-        Computed Signal: Optimal for derived data
+    -> Performance Optimisation
         Regular Signal: Optimal for source data
+        Computed Signal: Optimal for derived data
 
                  ┌─────────────────┐
                  │  WRITABLE       │ ← Only these can be modified
@@ -823,7 +824,6 @@ Use the right tool: <br>
                 │            COMPUTED                 │ ← Everything else derives
                 │    (Pure, Automatic, Safe)          │
                 └─────────────────────────────────────┘
-
 
 </details>
 
