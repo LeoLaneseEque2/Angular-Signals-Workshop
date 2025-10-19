@@ -1,7 +1,7 @@
 # Eque2 - Angular Workshop 
 
 ```ts
-"State isn't just data, it's behaviour waiting to happen."
+The Signal Revolution (And Why You Should Care)
 
 Workshop:
       Evolving Angular: From Imperative → Reactive → Signals. Introducing the New Angular Mindset
