@@ -4,7 +4,7 @@
 
 🟦 [1. Why This Matters?](#1-why-this-matters) <br>
 -- 🟨 Simplicity <br>
--- 🟨 Performance: <br>
+-- 🟨 Performance <br>
 -- 🟨 Modern Developer Experience (Finally) <br>
 -- 🟨 Magic? No magic <br>
 
@@ -40,7 +40,7 @@
 
 >  Signals are framework-native. Simpler mental models and less bugs
 
- ## Demo
+ ## Signal Demo
  https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-signal-demo.component.ts
 
 <details>
@@ -58,7 +58,7 @@
             }
             
             ngOnDestroy() {
-              this.subscription?.unsubscribe(); // Don't forget this!
+              this.subscription?.unsubscribe(); // hey don't forget this!
             }
             
             🎯 No Cleanup Required
@@ -79,15 +79,16 @@
             ).subscribe(names => {
               console.log('Names:', names);
             });
-
 </details>
 
 <br><br>
 
-<details>
-    <summary> <h2>🟨 Performance:</h2> </summary>
+<h2>🟨 Performance: </h2>
     
-    🔸 ZoneJS checks EVERY component in the component tree, regardless of the actual App number of Components. The problem scales as your Angular app grows: `ZoneJS inefficiency grows linearly`, `while Signals remain constant`.
+🔸 ZoneJS checks EVERY component in the component tree, regardless of the actual App number of Components. The problem scales as your Angular app grows: `ZoneJS inefficiency grows linearly`, `while Signals remain constant`.
+
+<details>
+    <summary> Demo ZoneJS Complexity: O(n) / Signals Complexity: O(1)</summary>
 
       - The Mathematical Reality:
         ZoneJS Complexity: O(n) - Cost increases linearly with component count
@@ -100,19 +101,19 @@
              1,000 components → Update only 1-2 that actually changed
              10,000 components → Update only 1-2 that actually changed
     
-    - Change Detection Cost (Relative)
-    ┌────────────────────────────────────────────────┐
-    │ ZoneJS  ██████████████████████████ 100%        │
-    │ Signals ██████ 6%                              │
-    │                                                │
-    │ ZoneJS  █████████████████████████████████ 100% │
-    │ Signals ██████ 6%                              │
-    │                                                │
-    │ ZoneJS  █████████████████████████████████ 100% │
-    │ Signals ██████ 6%                              │
-    │                                                │
-    └────────────────────────────────────────────────┘
-       10 comp    100 comp    1000 comp
+        - Change Detection Cost (Relative)
+        ┌────────────────────────────────────────────────┐
+        │ ZoneJS  ██████████████████████████ 100%        │
+        │ Signals ██████ 6%                              │
+        │                                                │
+        │ ZoneJS  █████████████████████████████████ 100% │
+        │ Signals ██████ 6%                              │
+        │                                                │
+        │ ZoneJS  █████████████████████████████████ 100% │
+        │ Signals ██████ 6%                              │
+        │                                                │
+        └────────────────────────────────────────────────┘
+           10 comp    100 comp    1000 comp
 
 🔴 Before Signals (ZoneJS):
  
@@ -175,13 +176,11 @@ This is why Signals don't just improve performance, they transform Angular scala
 
 <br><br>
 
----
-
 <h2> 🟨 Magic? No magic</h2>
 <br>
 
 🔸No more `Blanket Change-Detection Dependency` 
-Before traditional Angular relied completely on ZoneJS, creating a "blanket dependency" on the event loop. Any asynchronous operation, relevant to our Component or not, was async monkey-patch and could trigger a full application Change-Detection cycle
+Before traditional Angular relied completely on ZoneJS, creating a "blanket dependency" on the event loop. Any async-operation, relevant to our Component or not, was async monkey-patch and could trigger a full application Change-Detection cycle
 Now with Signals, Angular break this dependency by introducing `fine-grained reactivity` and `eliminate the blanket aprroach`: Components only update when their specific dependencies change.
 
 🔸No more `traverse the entire component tree` checking everything causing `Change Detection storms`
@@ -195,7 +194,6 @@ Now with Signal, Angular `updates are synchronous and direct without waiting for
 In othe words: <br>
 (Traditional Angular) Any Async Event → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
 (Modern Angular)     Signal Change → 🎯 Direct Update → Only Affected Components <br>
-
 
 
 <br><br>
