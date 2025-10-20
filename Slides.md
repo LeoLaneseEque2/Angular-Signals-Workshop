@@ -1,4 +1,4 @@
-🟩 Workshop Evolving Angular: 🔴 Imperative → 🟡 Reactive → 🟢 Signals. The new Angular Mindsetgma
+🟩 Workshop Evolving Angular: 🔴 Imperative → 🟡 Reactive → 🟢 Signals. The new Angular Mindset
 
 > I'll admit it. When I first got my hands on Angular Signals, I thought, "ok Cool, reactive variables just like RxJS but easier" ... I couldn't have underestimated them more. The truth is, they're not just a simpler alternative; they're an entirely new midset for Angular Change-Detection.
 
