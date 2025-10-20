@@ -7,7 +7,7 @@ Workshop:
       Evolving Angular: From Imperative → Reactive → Signals. Introducing the New Angular Mindset
 ```
 
-![Angular-logo](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/refs/heads/main/images/angular.webp?token=GHSAT0AAAAAADMSCYKF5REB6DTPZUPQSGPM2HDZF2Q)
+![Angular-logo](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/angular.webp)
 
 
 ```js
