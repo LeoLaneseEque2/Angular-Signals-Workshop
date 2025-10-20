@@ -169,11 +169,11 @@
 <br><br>
 
 <h2>Angular Change Detection Illustrated</h2>
-![Change Detection](./images/Default-change-detection.gif)
+![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/Default-change-detection.gif)
 <details>
     <summary>Change Detection Details</summary>
-        ![Change Detection](./images/Default-change-detection.gif)
-        ![Angular Logo](./images/angular.webp)
+        ![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/Default-change-detection.gif)
+
 </details>
 
 
