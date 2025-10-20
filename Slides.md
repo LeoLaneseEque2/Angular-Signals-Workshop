@@ -91,12 +91,12 @@
     <summary> Demo ZoneJS Complexity: O(n) / Signals Complexity: O(1)</summary>
 
       - The Mathematical Reality:
-        ZoneJS Complexity: O(n) - Cost increases linearly with component count
+        ZoneJS Complexity: O(n) - Cost increases "linearly with component count"
              10 components → Check 10 templates
              1,000 components → Check 1,000 templates
              10,000 components → Check 10,000 templates
         
-        Signals Complexity: O(1) - Constant time regardless of app size
+        Signals Complexity: O(1) - "Constant time regardless of app size"
              10 components → Update only 1-2 that actually changed
              1,000 components → Update only 1-2 that actually changed
              10,000 components → Update only 1-2 that actually changed
@@ -167,6 +167,15 @@
 </details>
 
 <br><br>
+
+<h2>Angular Change Detection Illustrated</h2>
+![Change Detection](./images/Default-change-detection.gif)
+<details>
+    <summary>Change Detection Details</summary>
+        ![Change Detection](./images/Default-change-detection.gif)
+        ![Angular Logo](./images/angular.webp)
+</details>
+
 
 <h2> 🟨 Modern Developer Experience (Finally) </h2>
 <br>
