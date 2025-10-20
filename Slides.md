@@ -5,6 +5,7 @@
 🟦 [1. Why This Matters?](#1-why-this-matters) <br>
 -- 🟨 Simplicity <br>
 -- 🟨 Performance <br>
+-- 🟨 Angular Change-Detection Illustrated <br>
 -- 🟨 Modern Developer Experience (Finally) <br>
 -- 🟨 Magic? No magic <br>
 
@@ -168,10 +169,10 @@
 
 <br><br>
 
-<h2> 🟨 Angular Change-Detection Illustrated</h2>
+<h2>🟨 Angular Change-Detection Illustrated</h2>
 
 <details>
-    <summary>Change Detection Details</summary>
+    <summary>🔸Change Detection Details</summary>
 
     > An event happening anywhere in the DOM tree will have Angular check the entire tree for changes:
 
@@ -180,7 +181,7 @@
 </details>
 
 <details>
-    <summary>OnPush Change-Detection</summary>
+    <summary>🔸OnPush Change-Detection</summary>
 
     > If a hierarchy of components is using `OnPush`, then only that branch on OnPush components will be checked for changes:
 
@@ -190,7 +191,7 @@
 
 
 <details>
-    <summary>Signal Change-Detection</summary>
+    <summary>🔸Signal Change-Detection</summary>
 
     > This is the future of Angular. When using Signals, only the views of components that use that Signal will get updated, making it the best and most accurate option:
 
@@ -198,7 +199,7 @@
 
 </details>
 
-
+<br><br>
 
 <h2> 🟨 Modern Developer Experience (Finally) </h2>
 <br>
