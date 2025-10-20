@@ -170,13 +170,14 @@
 
 <h2>Angular Change Detection Illustrated</h2>
 
-![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/Default-change-detection.gif)
 
-![Angular-logo](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/angular.webp)
+
 
 <details>
     <summary>Change Detection Details</summary>
-        ![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/Default-change-detection.gif)
+
+![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/Default-change-detection.gif)
+
 
 </details>
 
