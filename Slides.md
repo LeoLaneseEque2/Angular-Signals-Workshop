@@ -168,18 +168,36 @@
 
 <br><br>
 
-<h2>Angular Change Detection Illustrated</h2>
-
-
-
+<h2> 🟨 Angular Change-Detection Illustrated</h2>
 
 <details>
     <summary>Change Detection Details</summary>
 
+    > An event happening anywhere in the DOM tree will have Angular check the entire tree for changes:
+
 ![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/Default-change-detection.gif)
 
+</details>
+
+<details>
+    <summary>OnPush Change-Detection</summary>
+
+    > If a hierarchy of components is using `OnPush`, then only that branch on OnPush components will be checked for changes:
+
+![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/onPush-change-detection.gif)
 
 </details>
+
+
+<details>
+    <summary>Signal Change-Detection</summary>
+
+    > This is the future of Angular. When using Signals, only the views of components that use that Signal will get updated, making it the best and most accurate option:
+
+![Change Detection](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/signal-change-detection.gif)
+
+</details>
+
 
 
 <h2> 🟨 Modern Developer Experience (Finally) </h2>
