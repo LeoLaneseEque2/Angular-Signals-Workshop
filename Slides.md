@@ -234,6 +234,13 @@ In othe words: <br>
 
 -- <h2> 🟨 Can I use Signals NOW?</h2>
 
+<details>
+    <summary> Can I use - Angular features by version </summary>
+        ![Can i use](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/can-i-use.png)
+</details>
+
+
+LINK:
 https://www.angular.courses/caniuse/features?search=signal
 
 
