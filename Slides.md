@@ -236,7 +236,11 @@ In othe words: <br>
 
 <details>
     <summary> Can I use - Angular features by version </summary>
-        ![Can i use](https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/can-i-use.png)
+    
+ <img src="https://raw.githubusercontent.com/LeoLaneseEque2/Angular-Signals/main/images/can-i-use.png" 
+         alt="Angular Features by Version" 
+         style="max-width: 100%; height: auto;">
+    
 </details>
 
 
