@@ -655,6 +655,8 @@ Always use `set()`, `update()`, or `mutate()`, never modify signal values direct
         
 </details>
 
+<br><br>
+
 ## 🟨 What Signals actually are and what they are not
 
 🔸 Observables
