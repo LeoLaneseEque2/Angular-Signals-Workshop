@@ -2,7 +2,7 @@
 
 <br><br>
 
-> I'll admit it. When I first got my hands on Angular Signals, I thought, "ok Cool, reactive variables just like RxJS but easier" ... I couldn't have underestimated them more. The truth is, they're not just a simpler alternative; they're an entirely new midset for Angular Change-Detection.
+> I'll admit it. When I first got my hands on Angular Signals, I thought, `ah cool, reactive variables just like RxJS but easier` ...  I couldn't have been more wrong. Signals aren't just a simpler alternative. Nop, they're an entirely new mindset for Angular that blew my mind, and I would like to share the story with you ...
 
 <br><br>
 
