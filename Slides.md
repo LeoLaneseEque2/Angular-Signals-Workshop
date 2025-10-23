@@ -87,6 +87,8 @@ https://stackblitz.com/edit/stackblitz-starters-jfc5qmpf?file=src%2Fapp-signal-d
 <h2>🟨 Performance: </h2>
     
 🔸 ZoneJS checks EVERY component in the component tree, regardless of the actual App number of Components. The problem scales as your Angular app grows: `ZoneJS inefficiency grows linearly`, `while Signals remain constant`.
+🔸 Zone.js (O(n)): "Check everything, just in case", but Signals (O(1)): "Update only what changed"
+🔸 Zone.js complexity scales when App scales up, Signals complexity stays constant
 
 <details>
     <summary> Demo ZoneJS Complexity: O(n) / Signals Complexity: O(1)</summary>
