@@ -8,6 +8,7 @@
 -- 🟨 Angular Change-Detection Illustrated <br>
 -- 🟨 Modern Developer Experience (Finally) <br>
 -- 🟨 Magic? No magic <br>
+-- 🟨 Can I use Signals NOW?<br>
 
 🟦 [2. The Reactive Mindset Shift](#2-the-reactive-mindset-shift) <br>
 -- 🟨 Angular patterns as the days go by <br>
@@ -231,11 +232,22 @@ In othe words: <br>
 (Modern Angular)     Signal Change → 🎯 Direct Update → Only Affected Components <br>
 
 
+-- <h2> 🟨 Can I use Signals NOW?</h2>
+
+https://www.angular.courses/caniuse/features?search=signal
+
+
+
 <br><br>
 -------------------------------------------------------------------------------------------------
 <br><br>
 
 ## 2. The Reactive Mindset shift
+
+🟣 Quick Poll: 
+- Who's currently using mostly imperative patterns? 
+- Who's heavily using RxJS with async pipes?
+- Who's already experimenting with Signals?
 
 ## 🟨 Angular progression as days go by: 
 → 1) 🔴 Angular 2–12 days: Imperative, manual subscribe/unsubscribe, ZoneJS magic, Change-Detection storms, manual cleanup  <br>
@@ -532,14 +544,14 @@ Always use `set()`, `update()`, or `mutate()`, never modify signal values direct
       active.set(false);      // No way to accidentally mutate
       ```
       
-      For Objects/Arrays: The Pitfall Zone
+      For Objects/Arrays: 🚨 **The Mutation Trap**
       ```js
       const user = signal({name: 'John', age: 30});
       const items = signal(['apple', 'banana']);
       
-      // ❌ SILENT BUGS - mutation doesn't trigger reactivity
-      user().name = 'Jane';       // UI won't update!
-      items().push('orange');     // No change detection!
+      // // ❌ SILENT FAILURE - UI won't update!
+      user().name = 'Jane';       // UI won't update! mutation doesn't trigger reactivity
+      items().push('orange');     // Same problem!
       
       // ✅ CORRECT - replacement triggers reactivity
       user.set({...user(), name: 'Jane'});
@@ -677,11 +689,22 @@ Signals = Are not streams. They're containers of a single value at a single mome
 
 <br> 
 
+
+## 🟨 "When to Use What" 
+
+| Use Case | Recommended Approach |
+|----------|---------------------|
+| Component State | 🟢 Signals |
+| Async Data Streams | 🔄 Observables |
+| Form State | 🟢 Signal-based Forms (v17+) |
+| Derived Values | 🟢 Computed Signals |
+| Complex Async Pipelines | 🔄 RxJS Operators |
+| Global State | 🟢 Signals in Services |
+
 ## 🟨 A fancy Analogy: Observables & Signals
 
 → Think of Observables like a water pipe: once you connect (subscribe), you start getting the flow. <br><br>
 → Signal instead, are more like a glass of water, always present, always filled, and holds the latest value. When the value changes, it's like someone replaced the water, and everything watching it gets notified instantly. <br>
-
 
 
 <br><br>
