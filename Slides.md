@@ -42,7 +42,7 @@
 >  Signals are framework-native. Simpler mental models and less bugs
 
  ## Signal Demo
- https://stackblitz.com/edit/stackblitz-starters-mktvpgr6?embed=1&file=src%2Fapp-signal-demo.component.ts
+https://stackblitz.com/edit/stackblitz-starters-jfc5qmpf?file=src%2Fapp-signal-demo.component.ts
 
 <details>
     <summary>🟢 Notice what happened here?</summary>
