@@ -39,7 +39,7 @@
 <h2> 🟨 Simplicity: </h2>
 <br>
 
->  Signals are framework-native. Simpler mental models and less bugs
+>  Signals are framework-native. Less boilerplate, simpler mental models = less bugs!
 
  ## Signal Demo
 https://stackblitz.com/edit/stackblitz-starters-jfc5qmpf?file=src%2Fapp-signal-demo.component.ts
