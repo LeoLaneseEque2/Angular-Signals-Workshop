@@ -55,7 +55,7 @@ https://stackblitz.com/edit/stackblitz-starters-jfc5qmpf?file=src%2Fapp-signal-d
 
             > Nothing .... No subscription management. No cleanup required. No pipe() operators ... No magic! ... just simple works!
         
-            🎯 No subscription maangement
+            💥 No subscription maangement
             private subscription?: Subscription;
             
             ngOnInit() {
@@ -68,7 +68,7 @@ https://stackblitz.com/edit/stackblitz-starters-jfc5qmpf?file=src%2Fapp-signal-d
               this.subscription?.unsubscribe(); // hey don't forget this!
             }
             
-            🎯 No Cleanup Required
+            💥 No Cleanup Required
             ngOnDestroy() {
               this.subscription1?.unsubscribe();
               this.subscription2?.unsubscribe();
@@ -76,7 +76,7 @@ https://stackblitz.com/edit/stackblitz-starters-jfc5qmpf?file=src%2Fapp-signal-d
               // ... more cleanup
             }
             
-            🎯 No Pipe Operators
+            💥 No Pipe Operators
             // Old way - Complex chaining
             this.data$.pipe(
               filter(data => data.length > 0),
@@ -221,21 +221,22 @@ This is why Signals don't just improve performance, they transform Angular scala
 <br>
 
 🔸No more `Blanket Change-Detection Dependency` 
-Before traditional Angular relied completely on ZoneJS, creating a "blanket dependency" on the event loop. Any async-operation, relevant to our Component or not, was async monkey-patch and could trigger a full application Change-Detection cycle
-Now with Signals, Angular break this dependency by introducing `fine-grained reactivity` and `eliminate the blanket aprroach`: Components only update when their specific dependencies change.
+🔴 `Before traditional Angular relied completely on ZoneJS, creating a "blanket dependency"` on the event loop. Any async-operation, relevant to our Component or not, was async monkey-patch and could trigger a full application Change-Detection cycle.
+🟢 Now with Signals, Angular break this dependency by introducing `fine-grained reactivity` and `eliminate the blanket aprroach`: Components only update when their specific dependencies change.
 
 🔸No more `traverse the entire component tree` checking everything causing `Change Detection storms`
-Before Angular had to traverse the entire component tree (using Depth-First Search algorithms) to find what changed, checking every component whether it needed updates or not, creating performance bottlenecks and accidental "Change Detection storms" as applications scaled.
-Now with signals, Angular `enable fine-grained updates to the DOM`, as it knows exactly which components are affected by each Signal, enabling direct, targeted updates without searching: `Eliminating unnecessary tree traversals`
+🔴 Before Angular had to traverse the entire component tree (using Depth-First Search algorithms) to find what changed, checking every component whether it needed updates or not, creating performance bottlenecks and accidental "Change Detection storms" as applications scaled.
+🟢 Now with signals, Angular `enable fine-grained updates to the DOM`, as it knows exactly which components are affected by each Signal, enabling direct, targeted updates without searching: `eliminating unnecessary tree traversals`
 
 🔸No more `waiting for Microtasks`:
-Before ZoneJS patched async APIs and change detection ran after microtasks completed, tying detection to the event loop's timing.
-Now with Signal, Angular `updates are synchronous and direct without waiting for the event loop`
+🔴 Before ZoneJS patched async APIs and Change-Detection ran after microtasks completed, tying detection to the event loop's timing.
+🟢 Now with Signal, Angular `updates are synchronous and direct without waiting for the event loop`
 
-In othe words: <br>
-(Traditional Angular) Any Async Event → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
-(Modern Angular)     Signal Change → 🎯 Direct Update → Only Affected Components <br>
-
+## 💡 Key Takeway: 
+```js
+🔴 Traditional Angular = Any Async Event       → 🛡️ ZoneJS Blanket → 💥 Check Entire App <br>
+🟢 Modern Angular      = Signal track Change   → 🎯 Direct Update  → Check only Affected Components <br>
+```
 
 -- <h2> 🟨 Can I use Signals NOW?</h2>
 
