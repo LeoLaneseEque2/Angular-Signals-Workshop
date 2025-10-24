@@ -55,6 +55,8 @@ Angular 2  Angular 5    Angular 8  Angular 12  Angular 15+    Angular 17+       
   <img src="https://scastiel.dev/api/image/leolanese?dark&removeLink" alt="leolanese’s GitHub image" width="600" height="314" />
 </a>
 
+<i>**A word about me:** I'm a Front-End, especially passionate about future-proof, user-centric solutions from both the front-end and data analytics perspectives. I participated in several important projects like: BBC, SKY, Mimecast, Luno, Metropolitan Police, IBM and Nokia between others. I also have the opportunity to share these knowledge in JS conferences and workshops around the word (Spain JSconf, ScolandJS and JSConf Argentina)</i>
+
 ##### :radio_button: Portfolio: <a href="https://www.leolanese.com" target="_blank">www.leolanese.com</a>
 ##### :radio_button: Linkedin: <a href="https://www.linkedin.com/in/leolanese/" target="_blank">LeoLanese</a>
 ##### :radio_button: Twitter: <a href="https://twitter.com/LeoLanese" target="_blank">@LeoLanese</a>
