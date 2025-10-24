@@ -46,9 +46,10 @@ Angular 2  Angular 5    Angular 8  Angular 12  Angular 15+    Angular 17+       
                                                                                                       Signal-Based forms, httpResource)
 ```
 
-## LINK
-[Watch the Teams Meeting Recording](https://teams.microsoft.com/l/meetingrecap?driveId=b%21eE0f-puY2E2k9oszmlxnJUW0OIvoWIpKg9NjqSqLhFF4YTqeCMNgRo9dsBlMI30w&driveItemId=01UYUOEWGO3FDLNONBFRE3IVCJO2JF5EDW&sitePath=https%3A%2F%2Feque2online-my.sharepoint.com%2F%3Av%3A%2Fg%2Fpersonal%2Fleo_lanese_eque2_com%2FEc7ZRra5oSxJtFRJdpJekHYB4xvQL5LOIQ5XjD-iynmlHQ&fileUrl=https%3A%2F%2Feque2online-my.sharepoint.com%2Fpersonal%2_)
+---
 
+### LINK
+[Watch the Teams Meeting Recording](https://teams.microsoft.com/l/meetingrecap?driveId=b%21eE0f-puY2E2k9oszmlxnJUW0OIvoWIpKg9NjqSqLhFF4YTqeCMNgRo9dsBlMI30w&driveItemId=01UYUOEWGO3FDLNONBFRE3IVCJO2JF5EDW&sitePath=https%3A%2F%2Feque2online-my.sharepoint.com%2F%3Av%3A%2Fg%2Fpersonal%2Fleo_lanese_eque2_com%2FEc7ZRra5oSxJtFRJdpJekHYB4xvQL5LOIQ5XjD-iynmlHQ&fileUrl=https%3A%2F%2Feque2online-my.sharepoint.com%2Fpersonal%2_)
 
 ---
 
