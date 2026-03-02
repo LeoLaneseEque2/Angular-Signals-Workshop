@@ -1,4 +1,4 @@
-# Angular Workshop - Eque2 (©) Client
+# Angular Workshop - Eque2 (©) 
 
 ## Workshop: `Evolving Angular Programming: From Imperative → Reactive asynchronous → Signals synchronous: Introducing the New Angular Reactivity Mindset`
 <br /><br />
